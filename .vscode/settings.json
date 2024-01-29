@@ -4,5 +4,8 @@
     "editor.fontVariations": false,
     "editor.formatOnSave": true,
     "editor.formatOnPaste": false,
-    "editor.formatOnSaveMode": "modifications"
+    "editor.formatOnSaveMode": "modifications",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    }
 }

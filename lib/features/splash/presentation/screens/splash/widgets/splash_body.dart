@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_market/features/splash/presentation/widgets/bg_widget.dart';
-import 'package:fruit_market/features/splash/presentation/widgets/title_widget.dart';
+import 'package:fruit_market/features/splash/presentation/screens/splash/widgets/bg_widget.dart';
+import 'package:fruit_market/features/splash/presentation/screens/splash/widgets/title_widget.dart';
 
 class SplashBody extends StatelessWidget {
   const SplashBody({
@@ -16,16 +16,13 @@ class SplashBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Spacer(
-            flex: 2,
-          ),
+          const Spacer(flex: 2),
           FadeTransition(
             opacity: _animation,
             child: const TitleWidget(),
           ),
           const Spacer(),
           const Expanded(
-            flex: 2,
             child: BgWidget(),
           ),
         ],
