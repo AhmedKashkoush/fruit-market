@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
-import 'package:fruit_market/core/widgets/custom_elevated_button.dart';
-import 'package:fruit_market/core/widgets/custom_text_button.dart';
-import 'package:fruit_market/features/onboarding/presentation/screens/widgets/custom_page_indicator.dart';
-import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_page_view.dart';
+import 'package:fruit_market/core/widgets/orientation_widget.dart';
+import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_landscape.dart';
+import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_portrait.dart';
 
 class OnBoardingBody extends StatefulWidget {
   const OnBoardingBody({
@@ -17,7 +16,7 @@ class OnBoardingBody extends StatefulWidget {
 
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   final PageController _controller = PageController();
-  bool _isLast = false;
+  final ValueNotifier<bool> _isLast = ValueNotifier<bool>(false);
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
@@ -31,14 +30,10 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   }
 
   void _pageListener() {
-    if (_controller.page! == 2 && !_isLast) {
-      setState(() {
-        _isLast = true;
-      });
+    if (_controller.page! == 2 && !_isLast.value) {
+      _isLast.value = true;
     } else {
-      setState(() {
-        _isLast = false;
-      });
+      _isLast.value = false;
     }
   }
 
@@ -47,54 +42,23 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: CustomTextButton(
-                text: !_isLast ? 'Skip' : '',
-                onPressed: !_isLast
-                    ? () {
-                        _animateToLast();
-                      }
-                    : null,
-              ),
-            ),
-            const Spacer(
-              flex: 2,
-            ),
-            Flexible(
-              flex: 7,
-              child: OnBoardingPageView(controller: _controller),
-            ),
-            // const Gap(50),
-            const Spacer(),
-            Align(
-              alignment: Alignment.center,
-              child: CustomPageIndicator(
-                controller: _controller,
-                onDotClicked: _animateToPage,
-              ),
-            ),
-            const Spacer(
-              flex: 2,
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: CustomElevatedButton(
-                onPressed: () {
-                  if (!_isLast) {
-                    _animateToNext();
-                  } else {
-                    _goToLogin(context);
-                  }
-                },
-                text: !_isLast ? 'Next' : 'Get Started',
-              ),
-            ),
-            const Spacer(),
-          ],
+        child: OrientationWidget(
+          portrait: OnBoardingBodyPortrait(
+            isLast: _isLast,
+            controller: _controller,
+            animateToPage: _animateToPage,
+            animateToLast: _animateToLast,
+            animateToNext: _animateToNext,
+            goToLogin: _goToLogin,
+          ),
+          landscape: OnBoardingBodyLandscape(
+            isLast: _isLast,
+            controller: _controller,
+            animateToPage: _animateToPage,
+            animateToLast: _animateToLast,
+            animateToNext: _animateToNext,
+            goToLogin: _goToLogin,
+          ),
         ),
       ),
     );
@@ -105,7 +69,7 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   }
 
   void _animateToNext() {
-    if (!_isLast) {
+    if (!_isLast.value) {
       _controller.animateToPage(
         _controller.page!.round() + 1,
         duration: const Duration(milliseconds: 700),
@@ -116,7 +80,7 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
 
   void _animateToLast() {
     if (_controller.hasClients) {
-      if (!_isLast) {
+      if (!_isLast.value) {
         _controller.animateToPage(
           3,
           duration: const Duration(milliseconds: 700),
