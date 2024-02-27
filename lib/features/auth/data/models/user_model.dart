@@ -21,7 +21,7 @@ class UserModel extends User {
         birthday: DateTime.tryParse(json['birthday']),
       );
 
-  Map<String, dynamic> toJson(UserModel user) => {
+  Map<String, dynamic> toJson() => {
         'name': name,
         'email': email,
         'phone': phone,

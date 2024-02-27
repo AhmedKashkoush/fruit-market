@@ -1,26 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/config/routes/router.dart';
 import 'package:fruit_market/config/themes/themes.dart';
 import 'package:fruit_market/core/constants/texts.dart';
+import 'package:fruit_market/core/utils/locator.dart';
+import 'package:fruit_market/core/utils/services.dart';
+import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeServices();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: appName,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: themeMode,
-      routerConfig: router,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+          create: (_) => sl<LoginBloc>(),
+        ),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: appName,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: themeMode,
+        routerConfig: router,
+      ),
     );
   }
 }

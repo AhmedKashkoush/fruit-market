@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
 import 'package:fruit_market/core/errors/failures.dart';
+import 'package:fruit_market/core/utils/partameters.dart';
 import 'package:fruit_market/features/auth/data/data%20sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_market/features/auth/data/models/user_model.dart';
 import 'package:fruit_market/features/auth/domain/repositories/base_auth_repository.dart';
@@ -10,11 +11,9 @@ class AuthRepository implements BaseAuthRepository {
 
   const AuthRepository(this.remoteDataSource);
   @override
-  Future<Either<Failure, UserModel>> login(
-      {required String email, required String password}) async {
+  Future<Either<Failure, UserModel>> login(LoginParams params) async {
     try {
-      final UserModel user =
-          await remoteDataSource.login(email: email, password: password);
+      final UserModel user = await remoteDataSource.login(params);
       return Right(user);
     } on AuthException catch (e) {
       return Left(
@@ -116,24 +115,9 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserModel>> signup({
-    required String name,
-    required String email,
-    required String password,
-    required String gender,
-    required String address,
-    String phone = '',
-    String imgUrl = '',
-    DateTime? birthday,
-  }) async {
+  Future<Either<Failure, UserModel>> signup(SignUpParams params) async {
     try {
-      final UserModel user = await remoteDataSource.signup(
-        name: name,
-        email: email,
-        password: password,
-        gender: gender,
-        address: address,
-      );
+      final UserModel user = await remoteDataSource.signup(params);
       return Right(user);
     } on AuthException catch (e) {
       return Left(
