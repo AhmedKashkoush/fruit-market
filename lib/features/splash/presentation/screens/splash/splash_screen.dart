@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/constants/colors.dart';
+import 'package:fruit_market/core/constants/preferences_keys.dart';
+import 'package:fruit_market/core/helpers/shared_preferences_helper.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/features/splash/presentation/screens/splash/widgets/splash_body.dart';
 
@@ -13,6 +15,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  final SharedPreferecesHelper _helper = SharedPreferecesHelper();
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1),
@@ -25,7 +28,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 3), () {
-      pushReplacementNamed(AppRoutes.onBoarding, context);
+      _goToRoute().then(
+        (route) => pushReplacementNamed(route, context),
+      );
     });
     super.initState();
   }
@@ -42,5 +47,12 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: primary,
       body: SplashBody(animation: _animation),
     );
+  }
+
+  Future<String> _goToRoute() async {
+    bool shownOnBoarding =
+        (_helper.read<bool>(PreferencesKeys.shownOnboarding) as bool?) ?? false;
+    if (!shownOnBoarding) return AppRoutes.onBoarding;
+    return AppRoutes.login;
   }
 }

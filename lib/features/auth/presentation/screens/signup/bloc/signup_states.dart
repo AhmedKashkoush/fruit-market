@@ -2,32 +2,31 @@ import 'package:equatable/equatable.dart';
 import 'package:fruit_market/core/utils/enums.dart';
 import 'package:fruit_market/features/auth/domain/entities/user.dart';
 
-abstract class LoginState extends Equatable {}
+abstract class SignUpState extends Equatable {}
 
-class LoginInitialState extends LoginState {
+class SignUpInitialState extends SignUpState {
   @override
   List<Object?> get props => [];
 }
 
-class LoginSuccessState extends LoginState {
+class SignUpSuccessState extends SignUpState {
   final User user;
 
-  LoginSuccessState(this.user);
-
+  SignUpSuccessState(this.user);
   @override
   List<Object?> get props => [user];
 }
 
-class LoginLoadingState extends LoginState {
+class SignUpLoadingState extends SignUpState {
   @override
   List<Object?> get props => [];
 }
 
-class LoginErrorState extends LoginState {
+class SignUpErrorState extends SignUpState {
   final String message;
   final ErrorType errorType;
 
-  LoginErrorState(
+  SignUpErrorState(
     this.message, {
     this.errorType = ErrorType.normal,
   });

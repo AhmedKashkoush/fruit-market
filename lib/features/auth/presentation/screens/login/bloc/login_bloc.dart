@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/core/errors/failures.dart';
+import 'package:fruit_market/core/utils/enums.dart';
 import 'package:fruit_market/features/auth/domain/entities/user.dart';
 import 'package:fruit_market/features/auth/domain/usecases/login_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
@@ -26,13 +27,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _loginWithEmailAndPassword(
-      LoginWithEmailAndPasswordEvent event, Emitter<LoginState> emit) async {
+    LoginWithEmailAndPasswordEvent event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(LoginLoadingState());
 
     final Either<Failure, User> result = await loginUseCase(event.params);
 
     result.fold(
-      (failure) => LoginErrorState(failure.message),
+      (failure) {
+        switch (failure.runtimeType) {
+          case AuthFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.auth,
+              ),
+            );
+            break;
+          case ConnectionFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.network,
+              ),
+            );
+            break;
+          default:
+            emit(
+              LoginErrorState(failure.message),
+            );
+        }
+      },
       (user) => emit(
         LoginSuccessState(user),
       ),
@@ -40,13 +66,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _loginWithGoogle(
-      LoginWithGoogleEvent event, Emitter<LoginState> emit) async {
+    LoginWithGoogleEvent event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(LoginLoadingState());
 
     final Either<Failure, User> result = await signInWithGoogleUseCase();
 
     result.fold(
-      (failure) => LoginErrorState(failure.message),
+      (failure) {
+        switch (failure.runtimeType) {
+          case AuthFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.auth,
+              ),
+            );
+            break;
+          case ConnectionFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.network,
+              ),
+            );
+            break;
+          default:
+            emit(
+              LoginErrorState(failure.message),
+            );
+        }
+      },
       (user) => emit(
         LoginSuccessState(user),
       ),
@@ -54,13 +105,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   FutureOr<void> _loginWithFacebook(
-      LoginWithFacebookEvent event, Emitter<LoginState> emit) async {
+    LoginWithFacebookEvent event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(LoginLoadingState());
 
     final Either<Failure, User> result = await signInWithFacebookUseCase();
 
     result.fold(
-      (failure) => LoginErrorState(failure.message),
+      (failure) {
+        switch (failure.runtimeType) {
+          case AuthFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.auth,
+              ),
+            );
+            break;
+          case ConnectionFailure:
+            emit(
+              LoginErrorState(
+                failure.message,
+                errorType: ErrorType.network,
+              ),
+            );
+            break;
+          default:
+            emit(
+              LoginErrorState(failure.message),
+            );
+        }
+      },
       (user) => emit(
         LoginSuccessState(user),
       ),

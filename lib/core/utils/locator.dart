@@ -11,8 +11,10 @@ import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_facebook
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_up_usecase.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
+import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -23,6 +25,11 @@ void initLocator() {
       sl<LoginUseCase>(),
       sl<SignInWithGoogleUseCase>(),
       sl<SignInWithFacebookUseCase>(),
+    ),
+  );
+  sl.registerFactory<SignUpBloc>(
+    () => SignUpBloc(
+      sl<SignUpUseCase>(),
     ),
   );
 
@@ -77,5 +84,8 @@ void initLocator() {
   sl.registerLazySingleton<FacebookAuth>(() => FacebookAuth.instance);
   sl.registerLazySingleton<Connectivity>(
     () => Connectivity(),
+  );
+  sl.registerLazySingletonAsync<SharedPreferences>(
+    () => SharedPreferences.getInstance(),
   );
 }

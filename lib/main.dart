@@ -6,6 +6,7 @@ import 'package:fruit_market/core/constants/texts.dart';
 import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/core/utils/services.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
+import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<LoginBloc>(
           create: (_) => sl<LoginBloc>(),
+        ),
+        BlocProvider<SignUpBloc>(
+          create: (_) => sl<SignUpBloc>(),
         ),
       ],
       child: MaterialApp.router(
