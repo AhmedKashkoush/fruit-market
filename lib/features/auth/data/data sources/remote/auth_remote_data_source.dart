@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fruit_market/core/constants/firebase_paths.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
@@ -32,6 +33,8 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     this.facebookAuth,
     this.connectivity,
   );
+
+  ///Login
   @override
   Future<UserModel> login(LoginParams params) async {
     final ConnectivityResult connectivityResult =
@@ -41,29 +44,33 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       throw const ConnectionException('Check your internet connection');
     }
 
-    final UserCredential credentials = await auth.signInWithEmailAndPassword(
-      email: params.email,
-      password: params.password,
-    );
+    try {
+      final UserCredential credentials = await auth.signInWithEmailAndPassword(
+        email: params.email,
+        password: params.password,
+      );
+      final Map<String, dynamic>? data = (await store
+              .collection(FirebasePaths.users)
+              .doc(credentials.user?.uid)
+              .get())
+          .data();
+      if (data == null) {
+        throw const AuthException('User with this credentials not found');
+      }
 
-    final Map<String, dynamic>? data = (await store
-            .collection(FirebasePaths.users)
-            .doc(credentials.user?.uid)
-            .get())
-        .data();
-
-    if (data == null) {
-      throw const AuthException('User with this credentials not found');
+      return UserModel.fromJson(data);
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(e.code);
     }
-
-    return UserModel.fromJson(data);
   }
 
+  ///Logout
   @override
   Future<void> logout() async {
     await auth.signOut();
   }
 
+  ///Facebook Login
   @override
   Future<UserModel> signInWithFacebook() async {
     final ConnectivityResult connectivityResult =
@@ -74,6 +81,20 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     }
 
     final LoginResult loginResult = await facebookAuth.login();
+    final LoginStatus status = loginResult.status;
+    debugPrint(
+        '=====================================Message: ${loginResult.message}');
+    switch (status) {
+      case LoginStatus.success:
+        break;
+      case LoginStatus.cancelled:
+        throw const AuthException(
+            'Facebook authentication process was cancelled');
+      case LoginStatus.failed:
+        throw const AuthException('Facebook authentication process failed');
+      case LoginStatus.operationInProgress:
+        break;
+    }
 
     final OAuthCredential facebookCredential =
         FacebookAuthProvider.credential(loginResult.accessToken!.token);
@@ -81,11 +102,13 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     final UserCredential credential =
         await auth.signInWithCredential(facebookCredential);
 
+    debugPrint('=====================================User: ${credential.user}');
+
     final UserModel user = UserModel(
-      name: auth.currentUser!.displayName!,
-      email: auth.currentUser!.email!,
-      phone: auth.currentUser!.phoneNumber!,
-      imgUrl: auth.currentUser!.photoURL!,
+      name: credential.user!.displayName!,
+      email: credential.user!.email!,
+      phone: credential.user!.phoneNumber ?? '',
+      imgUrl: credential.user!.photoURL!,
       gender: '',
       address: '',
     );
@@ -110,6 +133,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     return user;
   }
 
+  ///Google Login
   @override
   Future<UserModel> signInWithGoogle() async {
     final GoogleSignInAccount? googleAccount = await googleSignIn.signIn();
@@ -124,12 +148,11 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
 
     final UserCredential credential =
         await auth.signInWithCredential(googleCredential);
-
     final UserModel user = UserModel(
-      name: auth.currentUser!.displayName!,
-      email: auth.currentUser!.email!,
-      phone: auth.currentUser!.phoneNumber!,
-      imgUrl: auth.currentUser!.photoURL!,
+      name: credential.user!.displayName!,
+      email: credential.user!.email!,
+      phone: credential.user!.phoneNumber ?? '',
+      imgUrl: credential.user!.photoURL!,
       gender: '',
       address: '',
     );
@@ -154,6 +177,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     return user;
   }
 
+  ///Signup
   @override
   Future<UserModel> signup(SignUpParams params) async {
     final ConnectivityResult connectivityResult =

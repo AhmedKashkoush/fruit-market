@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_market/config/routes/routes.dart';
+import 'package:fruit_market/core/constants/preferences_keys.dart';
+import 'package:fruit_market/core/helpers/shared_preferences_helper.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/core/widgets/orientation_widget.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_landscape.dart';
@@ -17,6 +19,7 @@ class OnBoardingBody extends StatefulWidget {
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   final PageController _controller = PageController();
   final ValueNotifier<bool> _isLast = ValueNotifier<bool>(false);
+  final SharedPreferecesHelper _helper = SharedPreferecesHelper();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
@@ -64,7 +67,8 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
     );
   }
 
-  void _goToLogin(BuildContext context) {
+  void _goToLogin(BuildContext context) async {
+    _helper.write<bool>(PreferencesKeys.shownOnboarding, true);
     pushReplacementNamed(AppRoutes.login, context);
   }
 

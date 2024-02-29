@@ -28,9 +28,9 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
-      return Left(
+      return const Left(
         ServerFailure(
-          message: e.toString(),
+          message: 'Something went wrong',
         ),
       );
     }
@@ -54,9 +54,9 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
-      return Left(
+      return const Left(
         ServerFailure(
-          message: e.toString(),
+          message: 'Something went wrong',
         ),
       );
     }
@@ -80,9 +80,9 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
-      return Left(
+      return const Left(
         ServerFailure(
-          message: e.toString(),
+          message: 'Something went wrong',
         ),
       );
     }
@@ -106,9 +106,9 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
-      return Left(
+      return const Left(
         ServerFailure(
-          message: e.toString(),
+          message: 'Something went wrong',
         ),
       );
     }
@@ -132,9 +132,9 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
-      return Left(
+      return const Left(
         ServerFailure(
-          message: e.toString(),
+          message: 'Something went wrong',
         ),
       );
     }

@@ -1,7 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:fruit_market/core/constants/api_keys.dart';
 import 'package:fruit_market/features/auth/data/data%20sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_market/features/auth/data/repositories/auth_repository.dart';
 import 'package:fruit_market/features/auth/domain/repositories/base_auth_repository.dart';
@@ -18,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt sl = GetIt.instance;
 
-void initLocator() {
+Future<void> initLocator() async {
   ///Blocs
   sl.registerFactory<LoginBloc>(
     () => LoginBloc(
@@ -78,14 +80,16 @@ void initLocator() {
   //External
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
+  final List<String> scopes = ['email'];
   sl.registerLazySingleton<GoogleSignIn>(
-    () => GoogleSignIn(),
+    () => GoogleSignIn(clientId: googleWebClientId, scopes: scopes),
   );
   sl.registerLazySingleton<FacebookAuth>(() => FacebookAuth.instance);
   sl.registerLazySingleton<Connectivity>(
     () => Connectivity(),
   );
-  sl.registerLazySingletonAsync<SharedPreferences>(
-    () => SharedPreferences.getInstance(),
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(
+    () => prefs,
   );
 }

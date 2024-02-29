@@ -1,12 +1,5 @@
-enum ErrorType {
-  auth,
-  network,
-  cache,
-  normal,
-}
+enum ErrorType { auth, network, cache, normal }
 
-enum SuccessType {
-  auth,
-  network,
-  normal,
-}
+enum SuccessType { auth, network, normal }
+
+enum SocialAuthType { google, facebook }

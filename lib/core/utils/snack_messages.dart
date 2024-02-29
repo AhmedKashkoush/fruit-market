@@ -6,11 +6,13 @@ import 'package:gap/gap.dart';
 
 void showSuccessSnackBar(
   BuildContext context,
-  message, {
+  String message, {
   SuccessType successType = SuccessType.normal,
 }) {
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      behavior: SnackBarBehavior.floating,
       backgroundColor: success,
       content: Row(
         children: [
@@ -30,11 +32,13 @@ void showSuccessSnackBar(
               color: Colors.white,
             ),
           const Gap(5),
-          Text(
-            message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
         ],
@@ -45,11 +49,13 @@ void showSuccessSnackBar(
 
 void showErrorSnackBar(
   BuildContext context,
-  message, {
+  String message, {
   ErrorType errorType = ErrorType.normal,
 }) {
+  ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      behavior: SnackBarBehavior.floating,
       backgroundColor: error,
       content: Row(
         children: [
@@ -69,11 +75,13 @@ void showErrorSnackBar(
               color: Colors.white,
             ),
           const Gap(5),
-          Text(
-            message,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           )
         ],

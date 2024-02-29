@@ -22,6 +22,15 @@ class LoginLoadingState extends LoginState {
   @override
   List<Object?> get props => [];
 }
+class GoogleLoginLoadingState extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
+
+class FacebookLoginLoadingState extends LoginState {
+  @override
+  List<Object?> get props => [];
+}
 
 class LoginErrorState extends LoginState {
   final String message;
