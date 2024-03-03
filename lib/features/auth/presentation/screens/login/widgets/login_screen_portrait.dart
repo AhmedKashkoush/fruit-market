@@ -10,6 +10,7 @@ import 'package:fruit_market/core/widgets/label_widget.dart';
 import 'package:fruit_market/core/widgets/logo_widget.dart';
 import 'package:fruit_market/core/widgets/social_divider_widget.dart';
 import 'package:fruit_market/core/widgets/title_widget.dart';
+import 'package:fruit_market/features/auth/presentation/screens/login/widgets/forgot_password_button.dart';
 import 'package:gap/gap.dart';
 
 class LoginScreenPortrait extends StatelessWidget {
@@ -19,7 +20,8 @@ class LoginScreenPortrait extends StatelessWidget {
   final void Function(BuildContext) login,
       loginWithGoogle,
       loginWithFacebook,
-      goToSignUp;
+      goToSignUp,
+      goToChooseVerifiyMethod;
   final void Function() togglePasswordInvisibility;
   const LoginScreenPortrait({
     super.key,
@@ -34,6 +36,7 @@ class LoginScreenPortrait extends StatelessWidget {
     required this.loginWithFacebook,
     required this.togglePasswordInvisibility,
     required this.goToSignUp,
+    required this.goToChooseVerifiyMethod,
   });
 
   @override
@@ -76,6 +79,12 @@ class LoginScreenPortrait extends StatelessWidget {
                   ),
                 );
               }),
+          const Gap(5),
+          ForgotPasswordButton(
+            onTap: isLoading || isGoogleLoading || isFacebookLoading
+                ? null
+                : () => goToChooseVerifiyMethod(context),
+          ),
           const Gap(15),
           CustomElevatedButton(
             text: 'Log in',
@@ -93,7 +102,7 @@ class LoginScreenPortrait extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomAuthButton(
-                  label: 'Log in with',
+                  label: 'Log in with Google',
                   authType: SocialAuthType.google,
                   isLoading: isGoogleLoading,
                   onPressed: isLoading || isGoogleLoading || isFacebookLoading
@@ -106,7 +115,7 @@ class LoginScreenPortrait extends StatelessWidget {
               const Gap(10),
               Expanded(
                 child: CustomAuthButton(
-                  label: 'Log in with',
+                  label: 'Log in with Facebook',
                   authType: SocialAuthType.facebook,
                   isLoading: isFacebookLoading,
                   onPressed: isLoading || isGoogleLoading || isFacebookLoading

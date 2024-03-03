@@ -10,6 +10,7 @@ import 'package:fruit_market/core/widgets/label_widget.dart';
 import 'package:fruit_market/core/widgets/logo_widget.dart';
 import 'package:fruit_market/core/widgets/social_divider_widget.dart';
 import 'package:fruit_market/core/widgets/title_widget.dart';
+import 'package:fruit_market/features/auth/presentation/screens/login/widgets/forgot_password_button.dart';
 import 'package:gap/gap.dart';
 
 class LoginScreenLandscape extends StatelessWidget {
@@ -19,7 +20,8 @@ class LoginScreenLandscape extends StatelessWidget {
   final void Function(BuildContext) login,
       loginWithGoogle,
       loginWithFacebook,
-      goToSignUp;
+      goToSignUp,
+      goToChooseVerifiyMethod;
   final void Function() togglePasswordInvisibility;
   const LoginScreenLandscape({
     super.key,
@@ -34,6 +36,7 @@ class LoginScreenLandscape extends StatelessWidget {
     required this.loginWithFacebook,
     required this.togglePasswordInvisibility,
     required this.goToSignUp,
+    required this.goToChooseVerifiyMethod,
   });
 
   @override
@@ -88,6 +91,12 @@ class LoginScreenLandscape extends StatelessWidget {
                           ),
                         );
                       }),
+                  const Gap(5),
+                  ForgotPasswordButton(
+                    onTap: isLoading || isGoogleLoading || isFacebookLoading
+                        ? null
+                        : () => goToChooseVerifiyMethod(context),
+                  ),
                   const Gap(15),
                   CustomElevatedButton(
                     text: 'Log in',

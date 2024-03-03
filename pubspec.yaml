@@ -67,6 +67,8 @@ dependencies:
   cached_network_image: ^3.3.1
   # Onboarding Indicators
   smooth_page_indicator: ^1.1.0
+  # Country Code Picker
+  country_code_picker: ^3.0.0
   # Lottie Animations
   lottie: ^3.0.0
   # Widgets Spacing

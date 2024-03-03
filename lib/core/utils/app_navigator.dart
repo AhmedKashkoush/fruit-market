@@ -15,3 +15,17 @@ void pushReplacementNamed(
     extra: extra,
   );
 }
+void pushNamed(
+  String name,
+  BuildContext context, {
+  Map<String, String> pathParameters = const <String, String>{},
+  Map<String, dynamic> queryParameters = const <String, dynamic>{},
+  Object? extra,
+}) {
+  context.pushNamed(
+    name,
+    pathParameters: pathParameters,
+    queryParameters: queryParameters,
+    extra: extra,
+  );
+}

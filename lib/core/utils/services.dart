@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:fruit_market/core/constants/api_keys.dart';
 import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,6 +15,15 @@ Future<void> initializeServices() async {
   FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
   // Bloc.observer = MyObserver();
   await initLocator();
+  if (kIsWeb) {
+    sl<FacebookAuth>().webAndDesktopInitialize(
+      appId: facebookAppId,
+      cookie: true,
+      xfbml: true,
+      version: 'v15.0',
+    );
+  }
+
 }
 
 Future<void> _onBackgroundMessage(RemoteMessage message) async {}

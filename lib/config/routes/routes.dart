@@ -3,5 +3,8 @@ class AppRoutes {
   static const String onBoarding = '/on-boarding';
   static const String login = '/login';
   static const String signUp = '/sign-up';
+  static const String chooseVerificationMethod = '/choose-verification-method';
+  static const String emailInput = '/email-input';
+  static const String phoneInput = '/phone-input';
   static const String verification = '/verification';
 }

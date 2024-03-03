@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               loginWithFacebook: _loginWithFacebook,
               togglePasswordInvisibility: _togglePasswordInvisibility,
               goToSignUp: _goToSignUp,
+              goToChooseVerifiyMethod: _goToChooseVerifiyMethod,
             ),
             landscape: LoginScreenLandscape(
                 isPasswordShown: _isPasswordShown,
@@ -71,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 loginWithGoogle: _loginWithGoogle,
                 loginWithFacebook: _loginWithFacebook,
                 togglePasswordInvisibility: _togglePasswordInvisibility,
-                goToSignUp: _goToSignUp),
+              goToSignUp: _goToSignUp,
+              goToChooseVerifiyMethod: _goToChooseVerifiyMethod,
+            ),
           );
         },
       ),
@@ -102,6 +105,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _togglePasswordInvisibility() {
     _isPasswordShown.value = !_isPasswordShown.value;
+  }
+
+  
+  void _goToChooseVerifiyMethod(BuildContext context) {
+    pushNamed(AppRoutes.chooseVerificationMethod, context);
   }
 
   void _goToSignUp(BuildContext context) {
