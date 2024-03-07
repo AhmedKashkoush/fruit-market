@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
 import 'package:fruit_market/core/errors/failures.dart';
@@ -119,6 +121,136 @@ class AuthRepository implements BaseAuthRepository {
     try {
       final UserModel user = await remoteDataSource.signup(params);
       return Right(user);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendOTP(String phone) async {
+    try {
+      await remoteDataSource.sendOTP(phone);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendPasswordResetEmail(String email) async {
+    try {
+      await remoteDataSource.sendPasswordResetEmail(email);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> updatePassword(LoginParams params) async {
+    try {
+      await remoteDataSource.updatePassword(params);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> uploadPhoto(File photo) async {
+    try {
+      await remoteDataSource.uploadPhoto(photo);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> verifyOTP(String otp) async {
+    try {
+      await remoteDataSource.verifyOTP(otp);
+      return const Right(unit);
     } on AuthException catch (e) {
       return Left(
         AuthFailure(

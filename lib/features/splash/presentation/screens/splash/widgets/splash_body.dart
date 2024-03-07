@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_market/core/widgets/texts/title_widget.dart';
 import 'package:fruit_market/features/splash/presentation/screens/splash/widgets/bg_widget.dart';
-import 'package:fruit_market/core/widgets/title_widget.dart';
 
 class SplashBody extends StatelessWidget {
   const SplashBody({

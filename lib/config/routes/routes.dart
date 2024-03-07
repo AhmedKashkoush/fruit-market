@@ -6,5 +6,6 @@ class AppRoutes {
   static const String chooseVerificationMethod = '/choose-verification-method';
   static const String emailInput = '/email-input';
   static const String phoneInput = '/phone-input';
-  static const String verification = '/verification';
+  static const String emailVerification = '/email-verification';
+  static const String phoneVerification = '/phone-verification';
 }

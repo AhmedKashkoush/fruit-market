@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/widgets/custom_elevated_button.dart';
-import 'package:fruit_market/core/widgets/custom_selectable_list_title.dart';
-import 'package:fruit_market/core/widgets/label_widget.dart';
-import 'package:fruit_market/core/widgets/transparent_app_bar.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_selectable_list_title.dart';
+import 'package:fruit_market/core/widgets/texts/label_widget.dart';
+import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
 import 'package:gap/gap.dart';
 
 class ChooseVerificationMethodScreen extends StatefulWidget {
-  const ChooseVerificationMethodScreen({super.key});
+  final String emailRoute, phoneRoute;
+  const ChooseVerificationMethodScreen({
+    super.key,
+    required this.emailRoute,
+    required this.phoneRoute,
+  });
 
   @override
   State<ChooseVerificationMethodScreen> createState() =>
@@ -37,7 +41,7 @@ class _ChooseVerificationMethodScreenState
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const LabelWidget(
-                      label: 'Choose a method to send a verification code to',
+                      label: 'Choose a method for password reset',
                     ),
                     const Gap(5),
                     CustomeSelectableListTile<VerificationMethod?>(
@@ -58,7 +62,7 @@ class _ChooseVerificationMethodScreenState
                     const Gap(15),
                     CustomElevatedButton(
                       text: 'Confirm',
-                      onPressed: value == null ? null : _goToInputScreen,
+                      onPressed: value == null ? null : _goToScreen,
                     ),
                   ],
                 );
@@ -72,11 +76,11 @@ class _ChooseVerificationMethodScreenState
     _method.value = value;
   }
 
-  void _goToInputScreen() {
+  void _goToScreen() {
     if (_method.value == VerificationMethod.mail) {
-      pushReplacementNamed(AppRoutes.emailInput, context);
+      pushReplacementNamed(widget.emailRoute, context);
     } else {
-      pushReplacementNamed(AppRoutes.phoneInput, context);
+      pushReplacementNamed(widget.phoneRoute, context);
     }
   }
 }

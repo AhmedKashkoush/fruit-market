@@ -1,10 +1,12 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/extensions/string_validations.dart';
-import 'package:fruit_market/core/widgets/custom_elevated_button.dart';
-import 'package:fruit_market/core/widgets/custom_text_field.dart';
-import 'package:fruit_market/core/widgets/label_widget.dart';
-import 'package:fruit_market/core/widgets/transparent_app_bar.dart';
+import 'package:fruit_market/core/utils/app_navigator.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:fruit_market/core/widgets/inputs/phone_field.dart';
+import 'package:fruit_market/core/widgets/texts/label_widget.dart';
+import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
 import 'package:gap/gap.dart';
 
 class PhoneInputScreen extends StatefulWidget {
@@ -19,7 +21,6 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
       _code = ValueNotifier<String>('+20'),
       _text = ValueNotifier<String>('');
   final int _maxLength = 10;
-  final String _initialCode = 'eg';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,26 +40,9 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                       label: 'Enter your phone number',
                     ),
                     const Gap(5),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: CountryCodePicker(
-                            onChanged: _onCodeChange,
-                            initialSelection: _initialCode,
-                          ),
-                        ),
-                        const Gap(5),
-                        Expanded(
-                          flex: 2,
-                          child: CustomTextField(
-                            maxLength: _maxLength,
-                            enableCounter: false,
-                            keyboardType: TextInputType.phone,
-                            onChanged: _onTextChanged,
-                          ),
-                        ),
-                      ],
+                    PhoneField(
+                      onCodeChange: _onCodeChange,
+                      onTextChanged: _onTextChanged,
                     ),
                     const Gap(15),
                     CustomElevatedButton(
@@ -81,7 +65,9 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
     _text.value = '${_code.value}$phone';
   }
 
-  void _goToCodeScreen() {}
+  void _goToCodeScreen() {
+    pushReplacementNamed(AppRoutes.phoneVerification, context);
+  }
 
   void _onCodeChange(CountryCode value) {
     _code.value = value.dialCode!;

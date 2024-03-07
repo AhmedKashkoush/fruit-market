@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
-import 'package:fruit_market/core/widgets/auth_toggle_widget.dart';
+import 'package:fruit_market/core/widgets/buttons/auth_toggle_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});

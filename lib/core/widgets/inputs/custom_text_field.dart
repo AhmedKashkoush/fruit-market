@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText, enableCounter;
+  final bool? enableInteractiveSelection;
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
   final String? hintText;
+  final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   final int? maxLength;
   const CustomTextField({
@@ -19,16 +23,22 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.maxLength,
     this.enableCounter = true,
+    this.validator,
+    this.inputFormatters,
+    this.enableInteractiveSelection,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
       maxLength: maxLength,
+      validator: validator,
+      inputFormatters: inputFormatters,
+      enableInteractiveSelection: enableInteractiveSelection,
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: suffixIcon,

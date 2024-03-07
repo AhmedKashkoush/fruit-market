@@ -1,10 +1,12 @@
+import 'package:fruit_market/config/routes/path_parameters.dart';
 import 'package:fruit_market/config/routes/routes.dart';
-import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/choose%20verification%20method/choose_verification_method_screen.dart';
+import 'package:fruit_market/features/auth/presentation/screens/choose%20verification%20method/choose_verification_method_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/email%20input/email_input_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/phone_input_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/login_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/signup/signup_screen.dart';
-import 'package:fruit_market/features/auth/presentation/screens/verification/verification_screen.dart';
+import 'package:fruit_market/features/auth/presentation/screens/verification/email/password_reset_email_screen.dart';
+import 'package:fruit_market/features/auth/presentation/screens/verification/phone/phone_verification_screen.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:fruit_market/features/splash/presentation/screens/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -34,8 +36,12 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: AppRoutes.chooseVerificationMethod,
-      path: AppRoutes.chooseVerificationMethod,
-      builder: (context, state) => const ChooseVerificationMethodScreen(),
+      path:
+          '${AppRoutes.chooseVerificationMethod}/:${PathParameters.emailRoute}/:${PathParameters.phoneRoute}',
+      builder: (context, state) => ChooseVerificationMethodScreen(
+        emailRoute: state.pathParameters[PathParameters.emailRoute]!,
+        phoneRoute: state.pathParameters[PathParameters.phoneRoute]!,
+      ),
     ),
     GoRoute(
       name: AppRoutes.emailInput,
@@ -48,9 +54,16 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const PhoneInputScreen(),
     ),
     GoRoute(
-      name: AppRoutes.verification,
-      path: AppRoutes.verification,
-      builder: (context, state) => const VerificationScreen(),
+      name: AppRoutes.emailVerification,
+      path: '${AppRoutes.emailVerification}/:${PathParameters.email}',
+      builder: (context, state) => PasswordResetEmailScreen(
+        email: state.pathParameters[PathParameters.email]!,
+      ),
+    ),
+    GoRoute(
+      name: AppRoutes.phoneVerification,
+      path: AppRoutes.phoneVerification,
+      builder: (context, state) => const PhoneVerificationScreen(),
     ),
   ],
 );

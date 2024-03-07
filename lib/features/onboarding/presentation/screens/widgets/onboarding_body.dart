@@ -3,7 +3,7 @@ import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/constants/preferences_keys.dart';
 import 'package:fruit_market/core/helpers/shared_preferences_helper.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
-import 'package:fruit_market/core/widgets/orientation_widget.dart';
+import 'package:fruit_market/core/widgets/layout/orientation_widget.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_landscape.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_portrait.dart';
 

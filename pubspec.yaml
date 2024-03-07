@@ -49,6 +49,12 @@ dependencies:
   get_it: ^7.6.7
   # Handling Permissions
   permission_handler: ^11.3.0
+  # Location
+  geolocator: ^11.0.0
+  # Badges
+  badges: ^3.1.2
+  # Converts Speech To Text For Voice Search
+  speech_to_text: ^6.6.0
   # Localization
   easy_localization: ^3.0.4
   # Routing
@@ -75,6 +81,10 @@ dependencies:
   gap: ^3.0.1
   # Unique IDs
   uuid: ^4.3.3
+  # Date Format
+  intl: ^0.18.1
+  # Google Maps
+  google_maps_flutter: ^2.5.3
   # Firebase
   firebase_core: ^2.25.4
   # Auth
@@ -89,6 +99,8 @@ dependencies:
   firebase_storage: ^11.6.6
   # Notifications
   firebase_messaging: ^14.7.16
+  # Awesome Local Notifications
+  awesome_notifications: ^0.8.2
 
 dev_dependencies:
   flutter_test:

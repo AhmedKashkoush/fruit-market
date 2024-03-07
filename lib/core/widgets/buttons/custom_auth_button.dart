@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_market/core/constants/colors.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/widgets/social_logos.dart';
+import 'package:fruit_market/core/widgets/logos/social_logos.dart';
 
 class CustomAuthButton extends StatelessWidget {
   final SocialAuthType authType;

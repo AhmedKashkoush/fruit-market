@@ -7,6 +7,7 @@ import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/core/utils/services.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
+import 'package:fruit_market/features/auth/presentation/screens/verification/email/bloc/password_reset_email_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SignUpBloc>(
           create: (_) => sl<SignUpBloc>(),
+        ),
+
+        BlocProvider<PasswordResetEmailBloc>(
+          create: (_) => sl<PasswordResetEmailBloc>(),
         ),
       ],
       child: MaterialApp.router(

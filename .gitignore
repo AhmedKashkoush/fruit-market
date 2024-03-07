@@ -44,3 +44,4 @@ app.*.map.json
 
 
 lib/core/constants/api_keys.dart
+android/app/src/main/res/values/strings.xml

@@ -29,3 +29,9 @@ void pushNamed(
     extra: extra,
   );
 }
+
+void pop<T extends Object?>(BuildContext context, [T? result]) {
+  context.pop(
+    result,
+  );
+}

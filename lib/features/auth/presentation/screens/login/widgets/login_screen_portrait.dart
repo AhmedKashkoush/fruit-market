@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_market/core/constants/colors.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/widgets/auth_toggle_widget.dart';
-import 'package:fruit_market/core/widgets/custom_auth_button.dart';
-import 'package:fruit_market/core/widgets/custom_elevated_button.dart';
-import 'package:fruit_market/core/widgets/custom_text_field.dart';
-import 'package:fruit_market/core/widgets/label_widget.dart';
-import 'package:fruit_market/core/widgets/logo_widget.dart';
-import 'package:fruit_market/core/widgets/social_divider_widget.dart';
-import 'package:fruit_market/core/widgets/title_widget.dart';
+import 'package:fruit_market/core/widgets/buttons/auth_toggle_widget.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_auth_button.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:fruit_market/core/widgets/inputs/custom_text_field.dart';
+
+import 'package:fruit_market/core/widgets/logos/logo_widget.dart';
+import 'package:fruit_market/core/widgets/separators/social_divider_widget.dart';
+import 'package:fruit_market/core/widgets/texts/label_widget.dart';
+import 'package:fruit_market/core/widgets/texts/title_widget.dart';
+
 import 'package:fruit_market/features/auth/presentation/screens/login/widgets/forgot_password_button.dart';
 import 'package:gap/gap.dart';
 
@@ -71,6 +73,7 @@ class LoginScreenPortrait extends StatelessWidget {
                   controller: passwordController,
                   obscureText: !value,
                   keyboardType: TextInputType.text,
+                  enableInteractiveSelection: false,
                   suffixIcon: IconButton(
                     onPressed: togglePasswordInvisibility,
                     icon: value

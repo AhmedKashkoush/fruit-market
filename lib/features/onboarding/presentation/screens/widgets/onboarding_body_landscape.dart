@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_market/core/widgets/custom_elevated_button.dart';
-import 'package:fruit_market/core/widgets/custom_text_button.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_text_button.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/custom_page_indicator.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_page_view.dart';
 

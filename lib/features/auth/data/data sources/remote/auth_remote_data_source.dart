@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fruit_market/core/constants/firebase_paths.dart';
@@ -16,11 +19,19 @@ abstract class BaseAuthRemoteDataSource {
   Future<UserModel> signInWithGoogle();
   Future<UserModel> signInWithFacebook();
   Future<void> logout();
+
+  Future<void> sendPasswordResetEmail(String email);
+  Future<void> sendOTP(String phone);
+  Future<void> verifyOTP(String otp);
+  Future<void> updatePassword(LoginParams params);
+
+  Future<void> uploadPhoto(File photo);
 }
 
 class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   final FirebaseAuth auth;
   final FirebaseFirestore store;
+  final FirebaseStorage storage;
 
   final GoogleSignIn googleSignIn;
   final FacebookAuth facebookAuth;
@@ -29,6 +40,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   const AuthRemoteDataSource(
     this.auth,
     this.store,
+    this.storage,
     this.googleSignIn,
     this.facebookAuth,
     this.connectivity,
@@ -220,5 +232,69 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
         .doc(credentials.user?.uid)
         .set(user.toJson());
     return user;
+  }
+
+  @override
+  Future<void> sendOTP(String phone) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+
+    await auth.sendPasswordResetEmail(
+      email: email,
+    );
+  }
+
+  @override
+  Future<void> updatePassword(LoginParams params) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+
+    await auth.currentUser?.updatePassword(params.password);
+  }
+
+  @override
+  Future<void> uploadPhoto(File photo) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+    final String id = auth.currentUser!.uid;
+    final String url = await (await storage
+            .ref()
+            .child('${FirebasePaths.profilePhotos}/$id/$id')
+            .putFile(photo))
+        .ref
+        .getDownloadURL();
+    await store.collection(FirebasePaths.users).doc(id).update({'imgUrl': url});
+  }
+
+  @override
+  Future<void> verifyOTP(String otp) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
   }
 }
