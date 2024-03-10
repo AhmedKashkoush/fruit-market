@@ -5,6 +5,7 @@ import 'package:fruit_market/core/utils/enums.dart';
 import 'package:fruit_market/core/widgets/buttons/auth_toggle_widget.dart';
 import 'package:fruit_market/core/widgets/buttons/custom_auth_button.dart';
 import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
+import 'package:fruit_market/core/widgets/buttons/toggle_invisibility_button.dart';
 import 'package:fruit_market/core/widgets/inputs/custom_text_field.dart';
 
 import 'package:fruit_market/core/widgets/logos/logo_widget.dart';
@@ -86,12 +87,11 @@ class LoginScreenLandscape extends StatelessWidget {
                           obscureText: !value,
                           keyboardType: TextInputType.text,
                           enableInteractiveSelection: false,
-                          suffixIcon: IconButton(
-                            onPressed: togglePasswordInvisibility,
-                            icon: value
-                                ? const Icon(CupertinoIcons.eye_slash_fill)
-                                : const Icon(CupertinoIcons.eye_fill),
+                          suffixIcon: ToggleInVisibilityButton(
+                            isShown: value,
+                            toggleInvisibility: togglePasswordInvisibility,
                           ),
+
                         );
                       }),
                   const Gap(5),
@@ -147,7 +147,7 @@ class LoginScreenLandscape extends StatelessWidget {
                   const Gap(10),
                   AuthToggleWidget(
                     text: 'If you don\'t have an account you can ',
-                    buttonText: 'Sign up',
+                    buttonText: 'Create new account',
                     onTap: isLoading || isGoogleLoading || isFacebookLoading
                         ? null
                         : () {

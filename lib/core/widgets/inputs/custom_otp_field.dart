@@ -85,8 +85,6 @@ class _OTPField extends StatelessWidget {
         onChanged: (String value) {
           FocusScopeNode node = FocusScope.of(context);
 
-          debugPrint('value:$value');
-          debugPrint('${controller?.text.split('')}');
           if (value.isNotEmpty) {
             if (index == 0) {
               controller?.clear();
@@ -96,7 +94,7 @@ class _OTPField extends StatelessWidget {
             }
             node.nextFocus();
             if (onCodeEnd != null) {
-              if (index == length - 1) {
+              if (controller?.text.length == length) {
                 onCodeEnd!();
               }
             }

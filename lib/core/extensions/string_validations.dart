@@ -10,4 +10,11 @@ extension StringValidation on String {
     final bool phoneValid = RegExp(r'^\+(?:\d\s?){6,14}\d$').hasMatch(this);
     return phoneValid;
   }
+
+  bool get isStrongPassword {
+    final bool passwordValid =
+        RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$')
+            .hasMatch(this);
+    return passwordValid;
+  }
 }

@@ -12,6 +12,7 @@ Future<void> initializeServices() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+  FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
   // Bloc.observer = MyObserver();
   await initLocator();

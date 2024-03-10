@@ -15,6 +15,7 @@ abstract class BaseAuthRepository {
   Future<Either<Failure, Unit>> logout();
 
   Future<Either<Failure, Unit>> sendPasswordResetEmail(String email);
+  Future<Either<Failure, Unit>> sendEmailVerification(String email);
   Future<Either<Failure, Unit>> sendOTP(String phone);
   Future<Either<Failure, Unit>> verifyOTP(String otp);
   Future<Either<Failure, Unit>> updatePassword(LoginParams params);

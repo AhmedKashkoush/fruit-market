@@ -9,6 +9,7 @@ import 'package:fruit_market/features/auth/data/repositories/auth_repository.dar
 import 'package:fruit_market/features/auth/domain/repositories/base_auth_repository.dart';
 import 'package:fruit_market/features/auth/domain/usecases/login_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:fruit_market/features/auth/domain/usecases/send_email_verification_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
@@ -74,6 +75,12 @@ Future<void> initLocator() async {
 
   sl.registerLazySingleton<SendPasswordResetEmailUseCase>(
     () => SendPasswordResetEmailUseCase(
+      sl<BaseAuthRepository>(),
+    ),
+  );
+
+  sl.registerLazySingleton<SendEmailVerificationUseCase>(
+    () => SendEmailVerificationUseCase(
       sl<BaseAuthRepository>(),
     ),
   );

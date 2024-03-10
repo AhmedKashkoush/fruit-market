@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
 import 'package:fruit_market/core/errors/failures.dart';
 import 'package:fruit_market/core/utils/partameters.dart';
@@ -134,6 +135,7 @@ class AuthRepository implements BaseAuthRepository {
         ),
       );
     } catch (e) {
+      debugPrint(e.toString());
       return const Left(
         ServerFailure(
           message: 'Something went wrong',
@@ -250,6 +252,32 @@ class AuthRepository implements BaseAuthRepository {
   Future<Either<Failure, Unit>> verifyOTP(String otp) async {
     try {
       await remoteDataSource.verifyOTP(otp);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendEmailVerification(String email) async {
+    try {
+      await remoteDataSource.sendEmailVerification(email);
       return const Right(unit);
     } on AuthException catch (e) {
       return Left(

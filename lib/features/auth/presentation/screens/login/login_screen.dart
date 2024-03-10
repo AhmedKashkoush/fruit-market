@@ -113,7 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
       PathParameters.emailRoute: AppRoutes.emailInput,
       PathParameters.phoneRoute: AppRoutes.phoneInput,
     };
-    debugPrint('$pathParameters');
     pushNamed(
       AppRoutes.chooseVerificationMethod,
       context,

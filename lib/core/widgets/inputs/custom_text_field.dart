@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
-  final bool obscureText, enableCounter;
+  final bool obscureText, enableCounter, readOnly;
   final bool? enableInteractiveSelection;
   final TextInputType? keyboardType;
   final Widget? suffixIcon;
   final String? hintText;
   final String? Function(String?)? validator;
   final void Function(String)? onChanged;
+  final void Function()? onTap;
   final List<TextInputFormatter>? inputFormatters;
 
   final int? maxLength;
@@ -26,6 +27,8 @@ class CustomTextField extends StatelessWidget {
     this.validator,
     this.inputFormatters,
     this.enableInteractiveSelection,
+    this.readOnly = false,
+    this.onTap,
   });
 
   @override
@@ -33,8 +36,10 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
+      readOnly: readOnly,
       keyboardType: keyboardType,
       onChanged: onChanged,
+      onTap: onTap,
       maxLength: maxLength,
       validator: validator,
       inputFormatters: inputFormatters,

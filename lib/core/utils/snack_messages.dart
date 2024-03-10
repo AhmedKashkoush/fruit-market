@@ -69,6 +69,11 @@ void showErrorSnackBar(
               CupertinoIcons.wifi_exclamationmark,
               color: Colors.white,
             )
+          else if (errorType == ErrorType.location)
+            const Icon(
+              CupertinoIcons.location_slash_fill,
+              color: Colors.white,
+            )
           else
             const Icon(
               CupertinoIcons.clear_circled_solid,

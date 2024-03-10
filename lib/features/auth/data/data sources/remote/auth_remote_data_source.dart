@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fruit_market/core/constants/firebase_paths.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
@@ -21,6 +20,7 @@ abstract class BaseAuthRemoteDataSource {
   Future<void> logout();
 
   Future<void> sendPasswordResetEmail(String email);
+  Future<void> sendEmailVerification(String email);
   Future<void> sendOTP(String phone);
   Future<void> verifyOTP(String otp);
   Future<void> updatePassword(LoginParams params);
@@ -94,8 +94,6 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
 
     final LoginResult loginResult = await facebookAuth.login();
     final LoginStatus status = loginResult.status;
-    debugPrint(
-        '=====================================Message: ${loginResult.message}');
     switch (status) {
       case LoginStatus.success:
         break;
@@ -114,7 +112,6 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     final UserCredential credential =
         await auth.signInWithCredential(facebookCredential);
 
-    debugPrint('=====================================User: ${credential.user}');
 
     final UserModel user = UserModel(
       name: credential.user!.displayName!,
@@ -296,5 +293,19 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     if (connectivityResult == ConnectivityResult.none) {
       throw const ConnectionException('Check your internet connection');
     }
+  }
+  
+  @override
+  Future<void> sendEmailVerification(String email) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+
+    //     await auth.sendSignInLinkToEmail(
+    //   email: email, actionCodeSettings: ActionCodeSettings(url: ),
+    // );
   }
 }
