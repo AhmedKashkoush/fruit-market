@@ -24,9 +24,11 @@ Future<Either<String, Position>> getCurrentLocation() async {
   }
 }
 
-Future<Placemark> getAddressFromLocation(Position position) async {
-  return (await placemarkFromCoordinates(position.latitude, position.longitude))
-      .first;
+Future<Placemark> getAddressFromLocation(
+    double latitude, double longitude) async {
+  List<Placemark> placemarks =
+      await placemarkFromCoordinates(latitude, longitude);
+  return placemarks.first;
 }
 
 Future<Either<String, Placemark>> getAddressFromCurrentLocation() async {
@@ -34,5 +36,7 @@ Future<Either<String, Placemark>> getAddressFromCurrentLocation() async {
   if (result.isLeft()) {
     return Left((result as Left).value);
   }
-  return Right(await getAddressFromLocation((result as Right).value));
+  final Position position = (result as Right).value;
+  return Right(
+      await getAddressFromLocation(position.latitude, position.longitude));
 }

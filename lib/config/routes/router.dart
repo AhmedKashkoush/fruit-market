@@ -1,5 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fruit_market/config/routes/path_parameters.dart';
 import 'package:fruit_market/config/routes/routes.dart';
+import 'package:fruit_market/core/utils/locator.dart';
+import 'package:fruit_market/features/auth/presentation/screens/choose%20location%20manually/choose_location_manually_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/choose%20verification%20method/choose_verification_method_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/email%20input/email_input_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/phone_input_screen.dart';
@@ -64,6 +67,13 @@ final GoRouter router = GoRouter(
       name: AppRoutes.phoneVerification,
       path: AppRoutes.phoneVerification,
       builder: (context, state) => const PhoneVerificationScreen(),
+    ),
+    GoRoute(
+      name: AppRoutes.chooseLocation,
+      path: AppRoutes.chooseLocation,
+      builder: (context, state) => ChooseLocationManuallyScreen(
+        connectivity: sl<Connectivity>(),
+      ),
     ),
   ],
 );

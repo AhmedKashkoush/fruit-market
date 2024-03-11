@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fruit_market/config/routes/routes.dart';
+import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/core/utils/enums.dart';
 import 'package:fruit_market/core/utils/location.dart';
 import 'package:fruit_market/core/utils/snack_messages.dart';
-import 'package:fruit_market/core/widgets/buttons/custom_text_button.dart';
+import 'package:fruit_market/core/widgets/buttons/custom_outlined_button.dart';
 import 'package:fruit_market/core/widgets/inputs/custom_text_field.dart';
 import 'package:fruit_market/core/widgets/texts/label_widget.dart';
 import 'package:gap/gap.dart';
@@ -42,13 +44,24 @@ class AddressFormField extends StatelessWidget {
       initiallyExpanded: isExpanded.value,
       onExpansionChanged: _onExpansionChanged,
       children: [
-        Align(
-          alignment: AlignmentDirectional.centerEnd,
-          child: CustomTextButton(
-            text: 'Add address based on your location',
-            icon: CupertinoIcons.location_solid,
-            onPressed: () => _addAddressFromLocation(context),
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomOutlinedButton(
+                text: 'Add address based on your location',
+                icon: CupertinoIcons.location,
+                onPressed: () => _addAddressFromLocation(context),
+              ),
+            ),
+            const Gap(4),
+            Expanded(
+              child: CustomOutlinedButton(
+                text: 'Add address from custom location',
+                icon: CupertinoIcons.location_solid,
+                onPressed: () => _goToChooseLocation(context),
+              ),
+            ),
+          ],
         ),
         const Gap(10),
         Row(
@@ -118,6 +131,10 @@ class AddressFormField extends StatelessWidget {
         address.toString(),
       ),
     );
+  }
+
+  void _goToChooseLocation(BuildContext context) {
+    pushNamed(AppRoutes.chooseLocation, context);
   }
 
   void _onExpansionChanged(bool value) {

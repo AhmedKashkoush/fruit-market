@@ -8,4 +8,5 @@ class AppRoutes {
   static const String phoneInput = '/phone-input';
   static const String emailVerification = '/email-verification';
   static const String phoneVerification = '/phone-verification';
+  static const String chooseLocation = '/choose-location';
 }

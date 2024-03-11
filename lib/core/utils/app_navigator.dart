@@ -15,14 +15,14 @@ void pushReplacementNamed(
     extra: extra,
   );
 }
-void pushNamed(
+Future<T?> pushNamed<T extends Object?>(
   String name,
   BuildContext context, {
   Map<String, String> pathParameters = const <String, String>{},
   Map<String, dynamic> queryParameters = const <String, dynamic>{},
   Object? extra,
 }) {
-  context.pushNamed(
+  return context.pushNamed(
     name,
     pathParameters: pathParameters,
     queryParameters: queryParameters,

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_market/core/constants/colors.dart';
 
-class CustomTextButton extends StatelessWidget {
+class CustomOutlinedButton extends StatelessWidget {
   final String text;
   final void Function()? onPressed;
   final bool isLoading;
   final IconData? icon;
-  const CustomTextButton({
+  const CustomOutlinedButton({
     super.key,
     required this.text,
     this.onPressed,
@@ -17,9 +16,8 @@ class CustomTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return icon != null
-        ? TextButton.icon(
+        ? OutlinedButton.icon(
             onPressed: onPressed,
-            style: TextButton.styleFrom(foregroundColor: lightGrey),
             icon: !isLoading ? Icon(icon) : const SizedBox.shrink(),
             label: !isLoading
                 ? Text(text)
@@ -27,14 +25,13 @@ class CustomTextButton extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   ),
           )
-        : TextButton(
-      onPressed: onPressed,
-      style: TextButton.styleFrom(foregroundColor: lightGrey),
+        : OutlinedButton(
+            onPressed: onPressed,
             child: !isLoading
                 ? Text(text)
                 : const Center(
                     child: CircularProgressIndicator(),
                   ),
-    );
+          );
   }
 }

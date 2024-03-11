@@ -105,6 +105,8 @@ dependencies:
   firebase_messaging: ^14.7.16
   # Awesome Local Notifications
   awesome_notifications: ^0.8.2
+  # Webview
+  webview_flutter: ^4.7.0
 
 dev_dependencies:
   flutter_test:

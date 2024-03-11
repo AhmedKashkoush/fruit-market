@@ -3,6 +3,7 @@ import 'package:fruit_market/core/utils/snack_messages.dart';
 import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
 import 'package:fruit_market/core/widgets/inputs/custom_otp_field.dart';
 import 'package:fruit_market/core/widgets/texts/label_widget.dart';
+import 'package:fruit_market/core/widgets/visuals/otp_enter_widget.dart';
 import 'package:gap/gap.dart';
 
 class PhoneVerificationScreen extends StatefulWidget {
@@ -31,8 +32,11 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const OTPEnterWidget(),
+              const Gap(10),
               const LabelWidget(
-                  label: 'Enter the code sent to your phone number'),
+                label: 'Enter the code sent to your phone number',
+              ),
               const Gap(5),
               CustomOTPField(
                 controller: controller,
