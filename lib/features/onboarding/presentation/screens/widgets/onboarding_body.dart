@@ -43,24 +43,26 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: OrientationWidget(
-          portrait: OnBoardingBodyPortrait(
-            isLast: _isLast,
-            controller: _controller,
-            animateToPage: _animateToPage,
-            animateToLast: _animateToLast,
-            animateToNext: _animateToNext,
-            goToLogin: _goToLogin,
-          ),
-          landscape: OnBoardingBodyLandscape(
-            isLast: _isLast,
-            controller: _controller,
-            animateToPage: _animateToPage,
-            animateToLast: _animateToLast,
-            animateToNext: _animateToNext,
-            goToLogin: _goToLogin,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: OrientationWidget(
+            portrait: OnBoardingBodyPortrait(
+              isLast: _isLast,
+              controller: _controller,
+              animateToPage: _animateToPage,
+              animateToLast: _animateToLast,
+              animateToNext: _animateToNext,
+              goToLogin: _goToLogin,
+            ),
+            landscape: OnBoardingBodyLandscape(
+              isLast: _isLast,
+              controller: _controller,
+              animateToPage: _animateToPage,
+              animateToLast: _animateToLast,
+              animateToNext: _animateToNext,
+              goToLogin: _goToLogin,
+            ),
           ),
         ),
       ),

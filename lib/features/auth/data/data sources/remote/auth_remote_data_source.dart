@@ -145,6 +145,13 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   ///Google Login
   @override
   Future<UserModel> signInWithGoogle() async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+    
     final GoogleSignInAccount? googleAccount = await googleSignIn.signIn();
 
     final GoogleSignInAuthentication? googleAuth =

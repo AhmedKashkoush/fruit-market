@@ -53,113 +53,116 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          reverse: true,
-          child: BlocListener<SignUpBloc, SignUpState>(
-            listener: (_, state) {
-              if (state is SignUpErrorState) {
-                showErrorSnackBar(context, state.message,
-                    errorType: state.errorType);
-              }
+      body: SafeArea(
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            reverse: true,
+            child: BlocListener<SignUpBloc, SignUpState>(
+              listener: (_, state) {
+                if (state is SignUpErrorState) {
+                  showErrorSnackBar(context, state.message,
+                      errorType: state.errorType);
+                }
 
-              if (state is SignUpSuccessState) {
-                showSuccessSnackBar(
-                  context,
-                  'Credentials submitted',
-                );
-              }
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                //Full Name
-                const LabelWidget(label: 'Enter your full name'),
-                const Gap(2),
-                FullNameFormField(
-                  fNameController: _fNameController,
-                  lNameController: _lNameController,
-                ),
-                const Gap(10),
-
-                //Gender
-                const LabelWidget(label: 'Select your gender'),
-                const Gap(2),
-                GenderFormField(gender: _gender),
-                const Gap(10),
-
-                //DOB
-                const LabelWidget(label: 'Enter your date of birth (optional)'),
-                const Gap(2),
-                DOBFormField(dobController: _dobController),
-                const Gap(10),
-
-                //Address
-                const LabelWidget(label: 'Add your address'),
-                const Gap(2),
-                AddressFormField(
-                  countryController: _countryController,
-                  governorateController: _governorateController,
-                  cityController: _cityController,
-                  streetController: _streetController,
-                  isExpanded: _isExpanded,
-                ),
-                const Gap(10),
-
-                //Email
-                const LabelWidget(label: 'Enter your email address'),
-                const Gap(2),
-                EmailFormField(emailController: _emailController),
-                const Gap(10),
-
-                //Phone
-                const LabelWidget(label: 'Enter your phone number'),
-                const Gap(2),
-                PhoneFormField(phoneController: _phoneController),
-                const Gap(10),
-
-                //Password
-                const LabelWidget(label: 'Enter your password'),
-                const Gap(2),
-                PasswordFormField(
-                  isPasswordShown: _isPasswordShown,
-                  passwordController: _passwordController,
-                  togglePasswordInvisibility: _togglePasswordInvisibility,
-                ),
-                const Gap(10),
-
-                //Confirm
-                const LabelWidget(label: 'Confirm your password'),
-                const Gap(2),
-                ConfirmFormField(
-                  isConfirmShown: _isConfirmShown,
-                  passwordController: _passwordController,
-                  confirmController: _confirmController,
-                  toggleConfirmInvisibility: _toggleConfirmInvisibility,
-                ),
-                const Gap(15),
-
-                //Sign Up Button
-                BlocBuilder<SignUpBloc, SignUpState>(
-                  builder: (_, state) => CustomElevatedButton(
-                    text: 'Sign up',
-                    onPressed: _submit,
-                    isLoading: state is SignUpLoadingState,
+                if (state is SignUpSuccessState) {
+                  showSuccessSnackBar(
+                    context,
+                    'Credentials submitted',
+                  );
+                }
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  //Full Name
+                  const LabelWidget(label: 'Enter your full name'),
+                  const Gap(2),
+                  FullNameFormField(
+                    fNameController: _fNameController,
+                    lNameController: _lNameController,
                   ),
-                ),
-                const Gap(5),
+                  const Gap(10),
 
-                //Auth Toggle Button
-                AuthToggleWidget(
-                  text: 'If you already have an account you can ',
-                  buttonText: 'Log in',
-                  onTap: () {
-                    _goToLogin(context);
-                  },
-                ),
-              ],
+                  //Gender
+                  const LabelWidget(label: 'Select your gender'),
+                  const Gap(2),
+                  GenderFormField(gender: _gender),
+                  const Gap(10),
+
+                  //DOB
+                  const LabelWidget(
+                      label: 'Enter your date of birth (optional)'),
+                  const Gap(2),
+                  DOBFormField(dobController: _dobController),
+                  const Gap(10),
+
+                  //Address
+                  const LabelWidget(label: 'Add your address'),
+                  const Gap(2),
+                  AddressFormField(
+                    countryController: _countryController,
+                    governorateController: _governorateController,
+                    cityController: _cityController,
+                    streetController: _streetController,
+                    isExpanded: _isExpanded,
+                  ),
+                  const Gap(10),
+
+                  //Email
+                  const LabelWidget(label: 'Enter your email address'),
+                  const Gap(2),
+                  EmailFormField(emailController: _emailController),
+                  const Gap(10),
+
+                  //Phone
+                  const LabelWidget(label: 'Enter your phone number'),
+                  const Gap(2),
+                  PhoneFormField(phoneController: _phoneController),
+                  const Gap(10),
+
+                  //Password
+                  const LabelWidget(label: 'Enter your password'),
+                  const Gap(2),
+                  PasswordFormField(
+                    isPasswordShown: _isPasswordShown,
+                    passwordController: _passwordController,
+                    togglePasswordInvisibility: _togglePasswordInvisibility,
+                  ),
+                  const Gap(10),
+
+                  //Confirm
+                  const LabelWidget(label: 'Confirm your password'),
+                  const Gap(2),
+                  ConfirmFormField(
+                    isConfirmShown: _isConfirmShown,
+                    passwordController: _passwordController,
+                    confirmController: _confirmController,
+                    toggleConfirmInvisibility: _toggleConfirmInvisibility,
+                  ),
+                  const Gap(15),
+
+                  //Sign Up Button
+                  BlocBuilder<SignUpBloc, SignUpState>(
+                    builder: (_, state) => CustomElevatedButton(
+                      text: 'Sign up',
+                      onPressed: _submit,
+                      isLoading: state is SignUpLoadingState,
+                    ),
+                  ),
+                  const Gap(5),
+
+                  //Auth Toggle Button
+                  AuthToggleWidget(
+                    text: 'If you already have an account ',
+                    buttonText: 'Log in',
+                    onTap: () {
+                      _goToLogin(context);
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

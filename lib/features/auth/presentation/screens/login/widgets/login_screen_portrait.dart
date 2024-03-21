@@ -131,7 +131,7 @@ class LoginScreenPortrait extends StatelessWidget {
           ),
           const Gap(10),
           AuthToggleWidget(
-            text: 'If you don\'t have an account you can ',
+            text: 'If you don\'t have an account ',
             buttonText: 'Create new account',
             onTap: isLoading || isGoogleLoading || isFacebookLoading
                 ? null

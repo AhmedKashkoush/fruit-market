@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:fruit_market/core/widgets/buttons/custom_outlined_button.dart';
 
 class FindLocationButton extends StatelessWidget {
