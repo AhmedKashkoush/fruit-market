@@ -17,21 +17,22 @@ class CustomElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 64,
       child: icon != null
           ? ElevatedButton.icon(
               onPressed: isLoading ? null : onPressed,
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
                 foregroundColor: Colors.white,
-                textStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
+                // textStyle: const TextStyle(
+                //   fontWeight: FontWeight.bold,
+                //   fontSize: 8,
+                // ),
                 disabledBackgroundColor: primary.withOpacity(0.3),
                 disabledForegroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
-                  vertical: 20,
+                  vertical: 0,
                 ),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -53,32 +54,33 @@ class CustomElevatedButton extends StatelessWidget {
           : ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: primary,
-          foregroundColor: Colors.white,
-          textStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-          disabledBackgroundColor: primary.withOpacity(0.3),
-          disabledForegroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 32,
-            vertical: 20,
-          ),
+                backgroundColor: primary,
+                foregroundColor: Colors.white,
+                textStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+                disabledBackgroundColor: primary.withOpacity(0.3),
+                disabledForegroundColor: Colors.white,
+                
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 10,
+                ),
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(4),
             ),
           ),
         ),
-        child: !isLoading
-            ? Text(text)
-            : const FittedBox(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: primary,
-                  ),
-                ),
-              ),
+              child: !isLoading
+                  ? Center(child: Text(text))
+                  : const FittedBox(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: primary,
+                        ),
+                      ),
+                    ),
       ),
     );
   }

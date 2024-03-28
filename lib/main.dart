@@ -5,6 +5,7 @@ import 'package:fruit_market/config/themes/themes.dart';
 import 'package:fruit_market/core/constants/texts.dart';
 import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/core/utils/services.dart';
+import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/bloc/phone_input_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/verification/email/bloc/password_reset_email_bloc.dart';
@@ -31,6 +32,10 @@ class MyApp extends StatelessWidget {
 
         BlocProvider<PasswordResetEmailBloc>(
           create: (_) => sl<PasswordResetEmailBloc>(),
+        ),
+        
+        BlocProvider<PhoneInputBloc>(
+          create: (_) => sl<PhoneInputBloc>(),
         ),
       ],
       child: MaterialApp.router(

@@ -11,9 +11,11 @@ import 'package:fruit_market/features/auth/domain/usecases/login_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/send_email_verification_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/send_password_reset_email_usecase.dart';
+import 'package:fruit_market/features/auth/domain/usecases/send_phone_verification_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_up_usecase.dart';
+import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/bloc/phone_input_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/verification/email/bloc/password_reset_email_bloc.dart';
@@ -41,6 +43,12 @@ Future<void> initLocator() async {
   sl.registerFactory<PasswordResetEmailBloc>(
     () => PasswordResetEmailBloc(
       sl<SendPasswordResetEmailUseCase>(),
+    ),
+  );
+
+  sl.registerFactory<PhoneInputBloc>(
+    () => PhoneInputBloc(
+      sl<SendPhoneVerificationUseCase>(),
     ),
   );
 
@@ -81,6 +89,12 @@ Future<void> initLocator() async {
 
   sl.registerLazySingleton<SendEmailVerificationUseCase>(
     () => SendEmailVerificationUseCase(
+      sl<BaseAuthRepository>(),
+    ),
+  );
+
+  sl.registerLazySingleton<SendPhoneVerificationUseCase>(
+    () => SendPhoneVerificationUseCase(
       sl<BaseAuthRepository>(),
     ),
   );

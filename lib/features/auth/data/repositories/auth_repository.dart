@@ -145,10 +145,10 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> sendOTP(String phone) async {
+  Future<Either<Failure, String>> sendOTP(String phone) async {
     try {
-      await remoteDataSource.sendOTP(phone);
-      return const Right(unit);
+      final String vId = await remoteDataSource.sendOTP(phone);
+      return Right(vId);
     } on AuthException catch (e) {
       return Left(
         AuthFailure(

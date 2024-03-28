@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_market/core/constants/colors.dart';
 import 'package:fruit_market/core/utils/enums.dart';

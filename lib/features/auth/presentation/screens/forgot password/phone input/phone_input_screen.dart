@@ -1,12 +1,15 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/extensions/string_validations.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
+import 'package:fruit_market/core/utils/snack_messages.dart';
 import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';
 import 'package:fruit_market/core/widgets/inputs/phone_field.dart';
 import 'package:fruit_market/core/widgets/texts/label_widget.dart';
 import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
+import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/bloc/phone_input_bloc.dart';
 import 'package:gap/gap.dart';
 
 class PhoneInputScreen extends StatefulWidget {
@@ -45,12 +48,29 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                       onTextChanged: _onTextChanged,
                     ),
                     const Gap(15),
-                    CustomElevatedButton(
-                      text: 'Confirm',
-                      onPressed:
-                          !value.isPhone || _phone.value.length < _maxLength
+                    BlocConsumer<PhoneInputBloc, PhoneInputState>(
+                      listener: (context, state) {
+                        if (state is PhoneInputErrorState) {
+                          showErrorSnackBar(context, state.message,
+                              errorType: state.errorType);
+                        }
+
+                        if (state is PhoneInputSuccessState) {
+                          _goToCodeScreen();
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomElevatedButton(
+                          text: 'Confirm',
+                          isLoading: state is PhoneInputLoadingState,
+                          onPressed: 
+                              !value.isPhone ||
+                                  _phone.value.length < _maxLength ||
+                                  state is PhoneInputLoadingState
                               ? null
-                              : _goToCodeScreen,
+                              : () => _sendCode(context),
+                        );
+                      },
                     ),
                   ],
                 );
@@ -72,5 +92,9 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   void _onCodeChange(CountryCode value) {
     _code.value = value.dialCode!;
     _text.value = '${_code.value}${_phone.value}';
+  }
+  
+  void _sendCode(BuildContext context) {
+    context.read<PhoneInputBloc>().add(PhoneInputSendOTPEvent(_text.value));
   }
 }

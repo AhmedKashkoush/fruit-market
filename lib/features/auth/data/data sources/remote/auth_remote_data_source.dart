@@ -21,7 +21,7 @@ abstract class BaseAuthRemoteDataSource {
 
   Future<void> sendPasswordResetEmail(String email);
   Future<void> sendEmailVerification(String email);
-  Future<void> sendOTP(String phone);
+  Future<String> sendOTP(String phone);
   Future<void> verifyOTP(String otp);
   Future<void> updatePassword(LoginParams params);
 
@@ -238,14 +238,40 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     return user;
   }
 
+  ///Send OTP
   @override
-  Future<void> sendOTP(String phone) async {
+  Future<String> sendOTP(String phone) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
 
     if (connectivityResult == ConnectivityResult.none) {
       throw const ConnectionException('Check your internet connection');
     }
+
+    late final String vId;
+    String errorString = '';
+
+    await auth
+        .verifyPhoneNumber(
+      phoneNumber: phone,
+      codeSent: (verificationId, forceResendingToken) {
+        vId = verificationId;
+      },
+      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
+      verificationFailed: (FirebaseAuthException error) {
+        errorString = error.code;
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    )
+        .catchError((error) {
+      errorString = 'Could not send the code to the phone number';
+    });
+
+    if (errorString.isNotEmpty) {
+      throw ServerException(errorString);
+    }
+
+    return vId;
   }
 
   @override
