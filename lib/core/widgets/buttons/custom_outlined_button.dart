@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_market/core/constants/colors.dart';
 
 class CustomOutlinedButton extends StatelessWidget {
   final String text;
@@ -19,19 +20,31 @@ class CustomOutlinedButton extends StatelessWidget {
         ? OutlinedButton.icon(
             onPressed: onPressed,
             icon: !isLoading ? Icon(icon) : const SizedBox.shrink(),
-            label: !isLoading
-                ? Text(text)
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+            label: _displayWidget(),
           )
         : OutlinedButton(
             onPressed: onPressed,
-            child: !isLoading
-                ? Text(text)
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+            child: _displayWidget(),
           );
+  }
+
+  Widget _displayWidget() {
+    if (!isLoading) {
+      return Text(
+        text,
+        overflow: TextOverflow.ellipsis,
+      );
+    } else {
+      const double size = 20;
+      return const Center(
+        child: SizedBox(
+          height: size,
+          width: size,
+          child: CircularProgressIndicator(
+            color: primary,
+          ),
+        ),
+      );
+    }
   }
 }

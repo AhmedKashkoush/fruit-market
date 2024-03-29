@@ -35,7 +35,7 @@ class _CustomOTPFieldState extends State<CustomOTPField> {
     return Wrap(
       direction: Axis.horizontal,
       alignment: WrapAlignment.center,
-      spacing: 4,
+      spacing: 2,
       runSpacing: 4,
       children: List.generate(
         widget.length,
@@ -81,6 +81,9 @@ class _OTPField extends StatelessWidget {
       height: 64,
       child: TextFormField(
         validator: validator,
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
         maxLength: 1,
         onChanged: (String value) {
           FocusScopeNode node = FocusScope.of(context);

@@ -161,6 +161,12 @@ class AuthRepository implements BaseAuthRepository {
           message: e.message,
         ),
       );
+    } on ServerException catch (e) {
+      return Left(
+        ServerFailure(
+          message: e.message,
+        ),
+      );
     } catch (e) {
       return const Left(
         ServerFailure(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,9 @@ class AddressFormField extends StatelessWidget {
         _cityController = cityController,
         _streetController = streetController;
 
+  static final ValueNotifier<bool> _fetchingLocation =
+      ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -47,10 +52,16 @@ class AddressFormField extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: CustomOutlinedButton(
-                text: 'Add address based on your location',
-                icon: CupertinoIcons.location,
-                onPressed: () => _addAddressFromLocation(context),
+              child: ValueListenableBuilder(
+                  valueListenable: _fetchingLocation,
+                  builder: (context, value, _) {
+                    return CustomOutlinedButton(
+                      text: 'Add address based on your location',
+                      isLoading: value,
+                      icon: CupertinoIcons.location,
+                      onPressed: () => _addAddressFromLocation(context),
+                    );
+                  }
               ),
             ),
             const Gap(4),
@@ -122,15 +133,24 @@ class AddressFormField extends StatelessWidget {
   }
 
   void _addAddressFromLocation(BuildContext context) async {
+    _fetchingLocation.value = true;
     final Either<String, Placemark> result =
         await getAddressFromCurrentLocation();
     result.fold(
       (error) =>
           showErrorSnackBar(context, error, errorType: ErrorType.location),
-      (address) => debugPrint(
-        address.toString(),
-      ),
+      (address) {
+        log(
+          address.toString(),
+        );
+        _countryController.text = address.country!;
+        _governorateController.text = address.administrativeArea!;
+        _cityController.text = address.subAdministrativeArea!;
+        _streetController.text = address.street!;
+      },
     );
+
+    _fetchingLocation.value = false;
   }
 
   void _goToChooseLocation(BuildContext context) {

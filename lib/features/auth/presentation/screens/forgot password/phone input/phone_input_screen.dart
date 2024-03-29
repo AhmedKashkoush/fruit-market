@@ -11,6 +11,7 @@ import 'package:fruit_market/core/widgets/texts/label_widget.dart';
 import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/bloc/phone_input_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:fruit_market/core/utils/locator.dart';
 
 class PhoneInputScreen extends StatefulWidget {
   const PhoneInputScreen({super.key});
@@ -26,55 +27,57 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   final int _maxLength = 10;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TransparentAppBar(),
-      body: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: ValueListenableBuilder<String>(
-              valueListenable: _text,
-              builder: (context, value, _) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const LabelWidget(
-                      label: 'Enter your phone number',
-                    ),
-                    const Gap(5),
-                    PhoneField(
-                      onCodeChange: _onCodeChange,
-                      onTextChanged: _onTextChanged,
-                    ),
-                    const Gap(15),
-                    BlocConsumer<PhoneInputBloc, PhoneInputState>(
-                      listener: (context, state) {
-                        if (state is PhoneInputErrorState) {
-                          showErrorSnackBar(context, state.message,
-                              errorType: state.errorType);
-                        }
+    return BlocProvider(
+      create: (_) => sl<PhoneInputBloc>(),
+      child: Scaffold(
+        appBar: TransparentAppBar(),
+        body: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: ValueListenableBuilder<String>(
+                valueListenable: _text,
+                builder: (context, value, _) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const LabelWidget(
+                        label: 'Enter your phone number',
+                      ),
+                      const Gap(5),
+                      PhoneField(
+                        onCodeChange: _onCodeChange,
+                        onTextChanged: _onTextChanged,
+                      ),
+                      const Gap(15),
+                      BlocConsumer<PhoneInputBloc, PhoneInputState>(
+                        listener: (context, state) {
+                          if (state is PhoneInputErrorState) {
+                            showErrorSnackBar(context, state.message,
+                                errorType: state.errorType);
+                          }
 
-                        if (state is PhoneInputSuccessState) {
-                          _goToCodeScreen();
-                        }
-                      },
-                      builder: (context, state) {
-                        return CustomElevatedButton(
-                          text: 'Confirm',
-                          isLoading: state is PhoneInputLoadingState,
-                          onPressed: 
-                              !value.isPhone ||
-                                  _phone.value.length < _maxLength ||
-                                  state is PhoneInputLoadingState
-                              ? null
-                              : () => _sendCode(context),
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }),
+                          if (state is PhoneInputSuccessState) {
+                            _goToCodeScreen();
+                          }
+                        },
+                        builder: (context, state) {
+                          return CustomElevatedButton(
+                            text: 'Confirm',
+                            isLoading: state is PhoneInputLoadingState,
+                            onPressed: !value.isPhone ||
+                                    _phone.value.length < _maxLength ||
+                                    state is PhoneInputLoadingState
+                                ? null
+                                : () => _sendCode(context),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }),
+          ),
         ),
       ),
     );
@@ -95,6 +98,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   }
   
   void _sendCode(BuildContext context) {
+    FocusScope.of(context).unfocus();
     context.read<PhoneInputBloc>().add(PhoneInputSendOTPEvent(_text.value));
   }
 }

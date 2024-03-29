@@ -18,22 +18,11 @@ class CustomAuthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 64,
-      child: OutlinedButton.icon(
-        onPressed: isLoading ? null : onPressed,
-        style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(12)),
-        icon: _authLogoFromType(authType),
-        label: !isLoading
-            ? Text(label)
-            : const FittedBox(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: primary,
-                  ),
-                ),
-              ),
-      ),
+    return OutlinedButton.icon(
+      onPressed: isLoading ? null : onPressed,
+      style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(12)),
+      icon: _authLogoFromType(authType),
+      label: _displayWidget(),
     );
   }
 
@@ -46,6 +35,26 @@ class CustomAuthButton extends StatelessWidget {
         return const FacebookLogo();
       default:
         return const FlutterLogo();
+    }
+  }
+  
+  Widget _displayWidget() {
+    if (!isLoading) {
+      return Text(
+        label,
+        overflow: TextOverflow.ellipsis,
+      );
+    } else {
+      const double size = 28;
+      return const Center(
+        child: SizedBox(
+          height: size,
+          width: size,
+          child: CircularProgressIndicator(
+            color: primary,
+          ),
+        ),
+      );
     }
   }
 }

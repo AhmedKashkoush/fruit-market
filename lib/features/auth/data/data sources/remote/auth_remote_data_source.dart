@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -248,30 +250,33 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       throw const ConnectionException('Check your internet connection');
     }
 
-    late final String vId;
-    String errorString = '';
+    try {
+      Completer<String> completer = Completer<String>();
 
-    await auth
-        .verifyPhoneNumber(
-      phoneNumber: phone,
-      codeSent: (verificationId, forceResendingToken) {
-        vId = verificationId;
-      },
-      verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
-      verificationFailed: (FirebaseAuthException error) {
-        errorString = error.code;
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    )
-        .catchError((error) {
-      errorString = 'Could not send the code to the phone number';
-    });
-
-    if (errorString.isNotEmpty) {
-      throw ServerException(errorString);
+      await auth.verifyPhoneNumber(
+        phoneNumber: phone,
+        timeout: const Duration(seconds: 60),
+        codeSent: (verificationId, forceResendingToken) {
+          log(verificationId);
+          // completer.complete(verificationId);
+        },
+        verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
+        verificationFailed: (FirebaseAuthException error) {
+    },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      completer.complete('verificationId');
+      return await completer.future.timeout(
+        const Duration(seconds: 20),
+        onTimeout: () async {
+          log('log timeout:${completer.future.toString()}');
+          throw const ServerException('Could not fetch verification code');
+        },
+      )
+      ;
+    } catch (e) {
+      rethrow;
     }
-
-    return vId;
   }
 
   @override
