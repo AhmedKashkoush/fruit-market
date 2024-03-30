@@ -65,8 +65,12 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: AppRoutes.phoneVerification,
-      path: AppRoutes.phoneVerification,
-      builder: (context, state) => const PhoneVerificationScreen(),
+      path:
+          '${AppRoutes.phoneVerification}/:${PathParameters.verificationId}/:${PathParameters.phoneNumber}',
+      builder: (context, state) => PhoneVerificationScreen(
+        verificationId: state.pathParameters[PathParameters.verificationId]!,
+        phoneNumber: state.pathParameters[PathParameters.phoneNumber]!,
+      ),
     ),
     GoRoute(
       name: AppRoutes.chooseLocation,

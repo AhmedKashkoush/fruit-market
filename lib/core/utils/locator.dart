@@ -15,10 +15,12 @@ import 'package:fruit_market/features/auth/domain/usecases/send_phone_verificati
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_facebook_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_up_usecase.dart';
+import 'package:fruit_market/features/auth/domain/usecases/verify_phone_usecase.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/phone%20input/bloc/phone_input_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/signup/bloc/signup_bloc.dart';
 import 'package:fruit_market/features/auth/presentation/screens/verification/email/bloc/password_reset_email_bloc.dart';
+import 'package:fruit_market/features/auth/presentation/screens/verification/phone/bloc/phone_verification_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,11 +34,13 @@ Future<void> initLocator() async {
       sl<LoginUseCase>(),
       sl<SignInWithGoogleUseCase>(),
       sl<SignInWithFacebookUseCase>(),
+      sl<SendEmailVerificationUseCase>(),
     ),
   );
   sl.registerFactory<SignUpBloc>(
     () => SignUpBloc(
       sl<SignUpUseCase>(),
+      sl<SendEmailVerificationUseCase>(),
     ),
   );
 
@@ -49,6 +53,13 @@ Future<void> initLocator() async {
   sl.registerFactory<PhoneInputBloc>(
     () => PhoneInputBloc(
       sl<SendPhoneVerificationUseCase>(),
+    ),
+  );
+
+  sl.registerFactory<PhoneVerificationBloc>(
+    () => PhoneVerificationBloc(
+      sl<SendPhoneVerificationUseCase>(),
+      sl<VerifyPhoneUseCase>(),
     ),
   );
 
@@ -95,6 +106,12 @@ Future<void> initLocator() async {
 
   sl.registerLazySingleton<SendPhoneVerificationUseCase>(
     () => SendPhoneVerificationUseCase(
+      sl<BaseAuthRepository>(),
+    ),
+  );
+
+  sl.registerLazySingleton<VerifyPhoneUseCase>(
+    () => VerifyPhoneUseCase(
       sl<BaseAuthRepository>(),
     ),
   );

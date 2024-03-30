@@ -3,6 +3,11 @@ class AuthException implements Exception {
   const AuthException(this.message);
 }
 
+class VerificationException implements Exception {
+  final String message;
+  const VerificationException(this.message);
+}
+
 class ConnectionException implements Exception {
   final String message;
   const ConnectionException(this.message);

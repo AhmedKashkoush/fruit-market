@@ -13,6 +13,10 @@ class AuthFailure extends Failure {
   const AuthFailure({required super.message});
 }
 
+class VerificationFailure extends Failure {
+  const VerificationFailure({required super.message});
+}
+
 class ConnectionFailure extends Failure {
   const ConnectionFailure({required super.message});
 }

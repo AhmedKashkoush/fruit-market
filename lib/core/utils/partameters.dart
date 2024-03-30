@@ -19,3 +19,10 @@ class SignUpParams {
     required this.password,
   });
 }
+
+
+class VerifyPhoneParams {
+  final String verificationId, otp;
+
+  const VerifyPhoneParams({required this.verificationId, required this.otp});
+}

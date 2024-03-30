@@ -33,3 +33,25 @@ class SignUpErrorState extends SignUpState {
   @override
   List<Object?> get props => [message, errorType];
 }
+
+class EmailVerificationLoading extends SignUpState {
+  @override
+  List<Object?> get props => [];
+}
+
+class EmailVerificationSuccess extends SignUpState {
+  final String email;
+
+  EmailVerificationSuccess(this.email);
+  @override
+  List<Object?> get props => [email];
+}
+
+class EmailVerificationError extends SignUpState {
+  final String message;
+  final ErrorType errorType;
+  EmailVerificationError(
+      {required this.message, this.errorType = ErrorType.normal});
+  @override
+  List<Object?> get props => [message, errorType];
+}

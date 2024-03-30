@@ -35,6 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
               context,
               state.message,
               errorType: state.errorType,
+              onActionTap: state.errorType == ErrorType.verification
+                  ? () => _sendEmailVerification(context)
+                  : null,
             );
           }
 
@@ -43,6 +46,23 @@ class _LoginScreenState extends State<LoginScreen> {
               context,
               'You logged in successfully',
               successType: SuccessType.auth,
+            );
+          }
+
+          if (state is EmailVerificationError) {
+            showErrorSnackBar(
+              context,
+              state.message,
+              errorType: state.errorType,
+              actionLabel: 'Retry',
+              onActionTap: () => _sendEmailVerification(context),
+            );
+          }
+
+          if (state is EmailVerificationSuccess) {
+            showSuccessSnackBar(
+              context,
+              'Email verification sent to ${state.email}',
             );
           }
         },
@@ -85,6 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _login(BuildContext context) {
+    FocusScope.of(context).unfocus();
     final LoginParams params = LoginParams(
       email: _emailOrPhoneController.text.trim(),
       password: _passwordController.text.trim(),
@@ -95,12 +116,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _loginWithGoogle(BuildContext context) {
+    FocusScope.of(context).unfocus();
     context.read<LoginBloc>().add(
           LoginWithGoogleEvent(),
         );
   }
 
   void _loginWithFacebook(BuildContext context) {
+    FocusScope.of(context).unfocus();
     context.read<LoginBloc>().add(
           LoginWithFacebookEvent(),
         );
@@ -123,6 +146,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _goToSignUp(BuildContext context) {
+    FocusScope.of(context).unfocus();
     pushReplacementNamed(AppRoutes.signUp, context);
+  }
+  
+  void _sendEmailVerification(BuildContext context) {
+    context.read<LoginBloc>().add(
+          SendEmailVerificationEvent(
+            LoginParams(
+              email: _emailOrPhoneController.text.trim(),
+              password: _passwordController.text.trim(),
+            ),
+          ),
+        );
   }
 }

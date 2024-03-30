@@ -24,3 +24,11 @@ class LoginWithFacebookEvent extends LoginEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SendEmailVerificationEvent extends LoginEvent {
+  final LoginParams params;
+  SendEmailVerificationEvent(this.params);
+
+  @override
+  List<Object?> get props => [params];
+}

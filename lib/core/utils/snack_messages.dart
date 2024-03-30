@@ -51,12 +51,21 @@ void showErrorSnackBar(
   BuildContext context,
   String message, {
   ErrorType errorType = ErrorType.normal,
+  void Function()? onActionTap,
+  String actionLabel = 'Verify',
 }) {
   ScaffoldMessenger.of(context).removeCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,
       backgroundColor: error,
+      action: errorType != ErrorType.verification
+          ? null
+          : SnackBarAction(
+              label: actionLabel,
+              onPressed: onActionTap!,
+              textColor: Colors.white,
+            ),
       content: Row(
         children: [
           if (errorType == ErrorType.auth)
@@ -72,6 +81,11 @@ void showErrorSnackBar(
           else if (errorType == ErrorType.location)
             const Icon(
               CupertinoIcons.location_slash_fill,
+              color: Colors.white,
+            )
+          else if (errorType == ErrorType.verification)
+            const Icon(
+              Icons.person_off_rounded,
               color: Colors.white,
             )
           else

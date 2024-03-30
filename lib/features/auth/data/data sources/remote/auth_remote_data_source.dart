@@ -22,9 +22,10 @@ abstract class BaseAuthRemoteDataSource {
   Future<void> logout();
 
   Future<void> sendPasswordResetEmail(String email);
-  Future<void> sendEmailVerification(String email);
+  Future<void> sendEmailVerification(LoginParams params);
   Future<String> sendOTP(String phone);
-  Future<void> verifyOTP(String otp);
+  Future<void> verifyPhoneOTP(VerifyPhoneParams params);
+  Future<void> verifyEmailOTP(String otp);
   Future<void> updatePassword(LoginParams params);
 
   Future<void> uploadPhoto(File photo);
@@ -63,15 +64,23 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
         email: params.email,
         password: params.password,
       );
-      final Map<String, dynamic>? data = (await store
-              .collection(FirebasePaths.users)
-              .doc(credentials.user?.uid)
-              .get())
-          .data();
-      if (data == null) {
+
+      log(credentials.user.toString());
+      log(credentials.user!.emailVerified.toString());
+
+      if (credentials.user == null) {
         throw const AuthException('User with this credentials not found');
       }
 
+      if (!credentials.user!.emailVerified) {
+        throw const VerificationException('Email is not verified');
+      }
+
+      final Map<String, dynamic> data = (await store
+              .collection(FirebasePaths.users)
+              .doc(credentials.user?.uid)
+              .get())
+          .data()!;
       return UserModel.fromJson(data);
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.code);
@@ -205,23 +214,29 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       throw const ConnectionException('Check your internet connection');
     }
 
-    final List<QueryDocumentSnapshot<Map<String, dynamic>>> userData =
-        (await store
-                .collection(FirebasePaths.users)
-                .where('email', isEqualTo: params.email)
-                .where('phone', isEqualTo: params.phone)
-                .get())
-            .docs;
+    // final List<QueryDocumentSnapshot<Map<String, dynamic>>> userData =
+    //     (await store
+    //             .collection(FirebasePaths.users)
+    //             .where('email', isEqualTo: params.email)
+    //             .where('phone', isEqualTo: params.phone)
+    //             .get())
+    //         .docs;
 
-    if (userData.isNotEmpty) {
-      throw const AuthException('Invalid user credentials');
-    }
+    // if (userData.isNotEmpty) {
+    //   throw const AuthException('Invalid user credentials');
+    // }
 
     final UserCredential credentials =
         await auth.createUserWithEmailAndPassword(
       email: params.email,
       password: params.password,
-    );
+    )
+        .catchError((e) {
+      if (e.code == 'email-already-in-use') {
+        throw const AuthException('Invalid user credentials');
+      }
+      throw ServerException(e.toString());
+    });
 
     final UserModel user = UserModel(
       name: params.name,
@@ -258,18 +273,17 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
         timeout: const Duration(seconds: 60),
         codeSent: (verificationId, forceResendingToken) {
           log(verificationId);
-          // completer.complete(verificationId);
+          completer.complete(verificationId);
         },
         verificationCompleted: (PhoneAuthCredential phoneAuthCredential) {},
         verificationFailed: (FirebaseAuthException error) {
     },
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
-      completer.complete('verificationId');
+      // completer.complete('verificationId');
       return await completer.future.timeout(
-        const Duration(seconds: 20),
-        onTimeout: () async {
-          log('log timeout:${completer.future.toString()}');
+        const Duration(minutes: 1),
+        onTimeout: () {
           throw const ServerException('Could not fetch verification code');
         },
       )
@@ -279,6 +293,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     }
   }
 
+  ///Reset Password Email
   @override
   Future<void> sendPasswordResetEmail(String email) async {
     final ConnectivityResult connectivityResult =
@@ -293,6 +308,8 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     );
   }
 
+
+  ///Update Password
   @override
   Future<void> updatePassword(LoginParams params) async {
     final ConnectivityResult connectivityResult =
@@ -305,6 +322,8 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     await auth.currentUser?.updatePassword(params.password);
   }
 
+
+  ///Upload Photo
   @override
   Future<void> uploadPhoto(File photo) async {
     final ConnectivityResult connectivityResult =
@@ -323,8 +342,28 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     await store.collection(FirebasePaths.users).doc(id).update({'imgUrl': url});
   }
 
+
+  ///Verify Phone OTP
   @override
-  Future<void> verifyOTP(String otp) async {
+  Future<void> verifyPhoneOTP(VerifyPhoneParams params) async {
+    final ConnectivityResult connectivityResult =
+        await connectivity.checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      throw const ConnectionException('Check your internet connection');
+    }
+
+    final PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: params.verificationId,
+      smsCode: params.otp,
+    );
+    log(credential.toString());
+    // auth.checkActionCode(credential);
+  }
+
+  ///Verify Email OTP
+  @override
+  Future<void> verifyEmailOTP(String otp) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
 
@@ -333,8 +372,10 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     }
   }
   
+
+  ///Send Email Verification
   @override
-  Future<void> sendEmailVerification(String email) async {
+  Future<void> sendEmailVerification(LoginParams params) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
 
@@ -342,8 +383,16 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       throw const ConnectionException('Check your internet connection');
     }
 
-    //     await auth.sendSignInLinkToEmail(
-    //   email: email, actionCodeSettings: ActionCodeSettings(url: ),
-    // );
+    final UserCredential credential = await auth.signInWithEmailAndPassword(
+      email: params.email,
+      password: params.password,
+    );
+
+    await credential.user?.sendEmailVerification().catchError((e) {
+      throw const VerificationException('Could not send email verification');
+    });
+
+    await credential.user?.reload();
+
   }
 }

@@ -30,6 +30,12 @@ class AuthRepository implements BaseAuthRepository {
           message: e.message,
         ),
       );
+    } on VerificationException catch (e) {
+      return Left(
+        VerificationFailure(
+          message: e.message,
+        ),
+      );
     } catch (e) {
       return const Left(
         ServerFailure(
@@ -255,9 +261,9 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> verifyOTP(String otp) async {
+  Future<Either<Failure, Unit>> verifyPhoneOTP(VerifyPhoneParams params) async {
     try {
-      await remoteDataSource.verifyOTP(otp);
+      await remoteDataSource.verifyPhoneOTP(params);
       return const Right(unit);
     } on AuthException catch (e) {
       return Left(
@@ -281,9 +287,36 @@ class AuthRepository implements BaseAuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> sendEmailVerification(String email) async {
+  Future<Either<Failure, Unit>> verifyEmailOTP(String otp) async {
     try {
-      await remoteDataSource.sendEmailVerification(email);
+      await remoteDataSource.verifyEmailOTP(otp);
+      return const Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        AuthFailure(
+          message: e.message,
+        ),
+      );
+    } on ConnectionException catch (e) {
+      return Left(
+        ConnectionFailure(
+          message: e.message,
+        ),
+      );
+    } catch (e) {
+      return const Left(
+        ServerFailure(
+          message: 'Something went wrong',
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> sendEmailVerification(
+      LoginParams params) async {
+    try {
+      await remoteDataSource.sendEmailVerification(params);
       return const Right(unit);
     } on AuthException catch (e) {
       return Left(

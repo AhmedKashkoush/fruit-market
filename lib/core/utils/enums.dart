@@ -1,4 +1,4 @@
-enum ErrorType { auth, network, cache, location, normal }
+enum ErrorType { auth, verification, network, cache, location, normal }
 
 enum SuccessType { auth, network, normal }
 

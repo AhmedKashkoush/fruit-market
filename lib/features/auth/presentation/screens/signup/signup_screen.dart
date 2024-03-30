@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: const EdgeInsets.all(20),
             reverse: true,
             child: BlocListener<SignUpBloc, SignUpState>(
-              listener: (_, state) {
+              listener: (context, state) {
                 if (state is SignUpErrorState) {
                   showErrorSnackBar(context, state.message,
                       errorType: state.errorType);
@@ -71,6 +71,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     context,
                     'Credentials submitted',
                   );
+                }
+
+                if (state is EmailVerificationError) {
+                  showErrorSnackBar(
+                    context,
+                    state.message,
+                    errorType: state.errorType,
+                    actionLabel: 'Retry',
+                    onActionTap: () => _sendEmailVerification(context),
+                  );
+                }
+
+                if (state is EmailVerificationSuccess) {
+                  showSuccessSnackBar(
+                    context,
+                    'Email verification sent to ${state.email}',
+                  );
+                  _goToLogin(context);
                 }
               },
               child: Column(
@@ -148,18 +166,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     builder: (_, state) => CustomElevatedButton(
                       text: 'Sign up',
                       onPressed: _submit,
-                      isLoading: state is SignUpLoadingState,
+                      isLoading: state is SignUpLoadingState ||
+                          state is EmailVerificationLoading,
                     ),
                   ),
                   const Gap(5),
 
                   //Auth Toggle Button
-                  AuthToggleWidget(
-                    text: 'If you already have an account ',
-                    buttonText: 'Log in',
-                    onTap: () {
-                      _goToLogin(context);
-                    },
+                  BlocBuilder<SignUpBloc, SignUpState>(
+                      builder: (_, state) => AuthToggleWidget(
+                            text: 'If you already have an account ',
+                            buttonText: 'Log in',
+                            onTap: state is SignUpLoadingState ||
+                                    state is EmailVerificationLoading
+                                ? null
+                                : () {
+                                    _goToLogin(context);
+                                  },
+                          )
                   ),
                 ],
               ),
@@ -168,6 +192,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void _sendEmailVerification(BuildContext context) {
+    context.read<SignUpBloc>().add(
+          SendEmailVerificationEvent(
+            LoginParams(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim(),
+            ),
+          ),
+        );
   }
 
   void _submit() {

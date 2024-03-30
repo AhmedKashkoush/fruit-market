@@ -11,3 +11,10 @@ class SignUpSubmitEvent extends SignUpEvent {
   @override
   List<Object?> get props => [params];
 }
+
+class SendEmailVerificationEvent extends SignUpEvent {
+  final LoginParams params;
+  SendEmailVerificationEvent(this.params);
+  @override
+  List<Object?> get props => [params];
+}
