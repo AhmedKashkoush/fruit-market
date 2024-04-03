@@ -17,10 +17,10 @@ class SubCategoryModelAdapter extends TypeAdapter<SubCategoryModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SubCategoryModel(
-      id: fields[0],
-      name: fields[1],
-      description: fields[2],
-      products: fields[3],
+      id: fields[0] as String,
+      name: fields[1] as String,
+      description: fields[2] as String,
+      products: fields[3] as List<ProductModel>,
     );
   }
 

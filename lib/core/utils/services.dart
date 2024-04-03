@@ -1,42 +1,22 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:fruit_market/core/constants/api_keys.dart';
+import 'package:fruit_market/core/utils/hive.dart';
 import 'package:fruit_market/core/utils/locator.dart';
+import 'package:fruit_market/core/utils/notifications.dart';
 import 'package:fruit_market/firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> initializeServices() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.instance.setAutoInitEnabled(false);
-  final RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    _handleMessage(initialMessage);
-  }
-  FirebaseMessaging.onBackgroundMessage(_handleMessage);
-  FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
+
+  await initNotifications();
+  await initHive();
   // Bloc.observer = MyObserver();
-  await Hive.initFlutter();
   await initLocator();
-  if (kIsWeb) {
-    sl<FacebookAuth>().webAndDesktopInitialize(
-      appId: facebookAppId,
-      cookie: true,
-      xfbml: true,
-      version: 'v15.0',
-    );
-  }
 
 }
-
-Future<void> _handleMessage(RemoteMessage message) async {}
-
-void _onMessageOpenedApp(RemoteMessage event) {}
 
 class MyObserver implements BlocObserver {
   @override
