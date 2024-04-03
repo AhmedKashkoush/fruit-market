@@ -6,15 +6,22 @@ import 'package:fruit_market/core/constants/api_keys.dart';
 import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/firebase_options.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> initializeServices() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
-  FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.instance.setAutoInitEnabled(false);
+  final RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    _handleMessage(initialMessage);
+  }
+  FirebaseMessaging.onBackgroundMessage(_handleMessage);
   FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenedApp);
   // Bloc.observer = MyObserver();
+  await Hive.initFlutter();
   await initLocator();
   if (kIsWeb) {
     sl<FacebookAuth>().webAndDesktopInitialize(
@@ -27,7 +34,7 @@ Future<void> initializeServices() async {
 
 }
 
-Future<void> _onBackgroundMessage(RemoteMessage message) async {}
+Future<void> _handleMessage(RemoteMessage message) async {}
 
 void _onMessageOpenedApp(RemoteMessage event) {}
 

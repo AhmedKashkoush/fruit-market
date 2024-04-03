@@ -107,6 +107,9 @@ dependencies:
   awesome_notifications: ^0.8.2
   # Webview
   webview_flutter: ^4.7.0
+  # Caching
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -120,6 +123,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   # Launcher Icons
   flutter_launcher_icons: "^0.13.1"
+  # Hive
+  hive_generator: ^2.0.0
+  build_runner: ^2.4.6
 
 flutter_launcher_icons:
   android: "launcher_icon"
