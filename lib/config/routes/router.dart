@@ -1,7 +1,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/config/routes/path_parameters.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/locator.dart';
+import 'package:fruit_market/core/widgets/home%20wrapper/home_navigation_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/choose%20location%20manually/choose_location_manually_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/choose%20verification%20method/choose_verification_method_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/forgot%20password/email%20input/email_input_screen.dart';
@@ -11,10 +14,14 @@ import 'package:fruit_market/features/auth/presentation/screens/signup/signup_sc
 import 'package:fruit_market/features/auth/presentation/screens/verification/email/password_reset_email_screen.dart';
 import 'package:fruit_market/features/auth/presentation/screens/verification/phone/phone_verification_screen.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:fruit_market/features/products/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:fruit_market/features/splash/presentation/screens/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
+final GlobalKey<NavigatorState> _rootKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> _homeKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
+  navigatorKey: _rootKey,
   initialLocation: AppRoutes.splash,
   routes: [
     GoRoute(
@@ -78,6 +85,47 @@ final GoRouter router = GoRouter(
       builder: (context, state) => ChooseLocationManuallyScreen(
         connectivity: sl<Connectivity>(),
       ),
+    ),
+    StatefulShellRoute.indexedStack(
+      parentNavigatorKey: _rootKey,
+      builder: (context, state, navigationShell) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => sl<HomeBloc>(),
+          ),
+        ],
+        child: HomeNavigationScreen(
+          navigationShell: navigationShell,
+        ),
+      ),
+      branches: [
+        StatefulShellBranch(
+          navigatorKey: _homeKey,
+          initialLocation: AppRoutes.home,
+          routes: [
+            GoRoute(
+              name: AppRoutes.home,
+              path: AppRoutes.home,
+              builder: (context, state) => const SizedBox(),
+            ),
+            GoRoute(
+              name: AppRoutes.shoppingCart,
+              path: AppRoutes.shoppingCart,
+              builder: (context, state) => const SizedBox(),
+            ),
+            GoRoute(
+              name: AppRoutes.favourites,
+              path: AppRoutes.favourites,
+              builder: (context, state) => const SizedBox(),
+            ),
+            GoRoute(
+              name: AppRoutes.myAccount,
+              path: AppRoutes.myAccount,
+              builder: (context, state) => const SizedBox(),
+            ),
+          ],
+        ),
+      ],
     ),
   ],
 );

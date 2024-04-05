@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Product extends Equatable {
-  final String id, name, description, imageUrl;
+  final String id, name, description, imageUrl, subCategoryId;
 
   final double price, rate;
 
@@ -15,6 +15,7 @@ class Product extends Equatable {
     required this.price,
     required this.rate,
     required this.nutritions,
+    required this.subCategoryId,
   });
 
   @override
@@ -26,5 +27,6 @@ class Product extends Equatable {
         price,
         rate,
         nutritions,
+        subCategoryId,
       ];
 }

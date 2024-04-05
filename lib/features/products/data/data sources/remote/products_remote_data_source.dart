@@ -1,25 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fruit_market/core/dummy/category_dummy.dart';
+import 'package:fruit_market/core/dummy/product_dummy.dart';
+import 'package:fruit_market/core/dummy/sub_category_dummy.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
 import 'package:fruit_market/features/products/data/models/category_model.dart';
 import 'package:fruit_market/features/products/data/models/product_model.dart';
 import 'package:fruit_market/features/products/data/models/sub_category_model.dart';
 
 abstract class BaseProductsRemoteDataSource {
-  Future<List<ProductModel>> getAllProductsInCategory(
-    CategoryModel category,
+  Future<List<ProductModel>> getProductsInSubCategory(
+    SubCategoryModel subCategory, [
+    ProductModel? startAfter,
+  ]
   );
 
   Future<List<ProductModel>> searchProductsByQuery(
     String query,
   );
 
-  Future<List<SubCategoryModel>> getAllSubCategoriesInCategory(
+  Future<List<SubCategoryModel>> getSubCategoriesInCategory(
     CategoryModel category,
+    [
+    SubCategoryModel? startAfter,
+  ]
   );
 
-  Future<List<CategoryModel>> getAllCategories();
+  Future<List<CategoryModel>> getCategories([
+    CategoryModel? startAfter,
+  ]);
 
   Future<void> addToFavourites(ProductModel product);
   Future<void> removeFromFavourites(ProductModel product);
@@ -54,42 +64,81 @@ class ProductsRemoteDataSource implements BaseProductsRemoteDataSource {
   }
 
   @override
-  Future<List<CategoryModel>> getAllCategories() async {
+  Future<List<CategoryModel>> getCategories([CategoryModel? startAfter]) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       throw const ConnectionException('Check your internet connection');
     }
 
-    final List<CategoryModel> categories = [];
+    Future.delayed(
+      const Duration(seconds: 3),
+    );
+
+    final List<CategoryModel> categories = CategoryDummy.categories
+        .skip(
+          startAfter != null
+              ? CategoryDummy.categories.indexOf(startAfter) + 1
+              : 0,
+        )
+        .take(4)
+        .toList();
 
     return categories;
   }
 
   @override
-  Future<List<ProductModel>> getAllProductsInCategory(
-      CategoryModel category) async {
+  Future<List<ProductModel>> getProductsInSubCategory(
+      SubCategoryModel subCategory,
+      [ProductModel? startAfter]) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       throw const ConnectionException('Check your internet connection');
     }
 
-    final List<ProductModel> products = [];
+    Future.delayed(
+      const Duration(seconds: 3),
+    );
+
+    final List<ProductModel> products = ProductDummy.products
+        .where((product) => product.subCategoryId == subCategory.id)
+        .skip(
+          startAfter != null
+              ? ProductDummy.products.indexOf(startAfter) + 1
+              : 0,
+        )
+        .take(5)
+        .toList();
+
 
     return products;
   }
 
   @override
-  Future<List<SubCategoryModel>> getAllSubCategoriesInCategory(
-      CategoryModel category) async {
+  Future<List<SubCategoryModel>> getSubCategoriesInCategory(
+      CategoryModel category,
+      [SubCategoryModel? startAfter]) async {
     final ConnectivityResult connectivityResult =
         await connectivity.checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
       throw const ConnectionException('Check your internet connection');
     }
 
-    final List<SubCategoryModel> subCategories = [];
+    Future.delayed(
+      const Duration(seconds: 3),
+    );
+
+    final List<SubCategoryModel> subCategories = SubCategoryDummy.subCategories
+        .where((subCategory) => subCategory.categoryId == category.id)
+        .skip(
+          startAfter != null
+              ? SubCategoryDummy.subCategories.indexOf(startAfter) + 1
+              : 0,
+        )
+        .take(5)
+        .toList();
+
 
     return subCategories;
   }

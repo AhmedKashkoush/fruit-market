@@ -5,19 +5,26 @@ import 'package:fruit_market/features/products/domain/entities/product.dart';
 import 'package:fruit_market/features/products/domain/entities/sub_category.dart';
 
 abstract class BaseProductsRepository {
-  Future<Either<Failure, List<Product>>> getAllProductsInCategory(
-    Category category,
+  Future<Either<Failure, List<Product>>> getProductsInSubCategory(
+    SubCategory subCategory, [
+    Product? startAfter,
+  ]
   );
 
   Future<Either<Failure, List<Product>>> searchProductsByQuery(
     String query,
   );
 
-  Future<Either<Failure, List<SubCategory>>> getAllSubCategoriesInCategory(
+  Future<Either<Failure, List<SubCategory>>> getSubCategoriesInCategory(
     Category category,
+    [
+    SubCategory? startAfter,
+  ]
   );
 
-  Future<Either<Failure, List<Category>>> getAllCategories();
+  Future<Either<Failure, List<Category>>> getCategories([
+    Category? startAfter,
+  ]);
 
   Future<Either<Failure, Unit>> addToFavourites(Product product);
   Future<Either<Failure, Unit>> removeFromFavourites(Product product);

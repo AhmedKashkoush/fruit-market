@@ -8,6 +8,7 @@ import 'package:fruit_market/features/products/data/models/product_model.dart';
 import 'package:fruit_market/features/products/data/models/sub_category_model.dart';
 import 'package:fruit_market/features/products/domain/entities/category.dart';
 import 'package:fruit_market/features/products/domain/entities/product.dart';
+import 'package:fruit_market/features/products/domain/entities/sub_category.dart';
 import 'package:fruit_market/features/products/domain/repositories/base_products_repository.dart';
 
 class ProductsRepository implements BaseProductsRepository {
@@ -57,15 +58,18 @@ class ProductsRepository implements BaseProductsRepository {
   }
 
   @override
-  Future<Either<Failure, List<CategoryModel>>> getAllCategories() async {
+  Future<Either<Failure, List<CategoryModel>>> getCategories(
+      [Category? startAfter]) async {
     try {
+      final CategoryModel? startAfterModel =
+          startAfter != null ? CategoryModel.fromEntity(startAfter) : null;
       final List<CategoryModel> categories =
-          await baseProductsRemoteDataSource.getAllCategories();
+          await baseProductsRemoteDataSource.getCategories(startAfterModel);
       baseProductsLocalDataSource.saveCategories(categories);
       return Right(categories);
     } on ConnectionException catch (e) {
       final List<CategoryModel> categories =
-          baseProductsLocalDataSource.getAllCategories();
+          baseProductsLocalDataSource.getCategories();
       if (categories.isNotEmpty) {
         return Right(categories);
       }
@@ -74,7 +78,7 @@ class ProductsRepository implements BaseProductsRepository {
       );
     } catch (e) {
       final List<CategoryModel> categories =
-          baseProductsLocalDataSource.getAllCategories();
+          baseProductsLocalDataSource.getCategories();
       if (categories.isNotEmpty) {
         return Right(categories);
       }
@@ -85,19 +89,26 @@ class ProductsRepository implements BaseProductsRepository {
   }
 
   @override
-  Future<Either<Failure, List<ProductModel>>> getAllProductsInCategory(
-    Category category,
+  Future<Either<Failure, List<ProductModel>>> getProductsInSubCategory(
+    SubCategory subCategory, [
+    Product? startAfter,
+  ]
   ) async {
     try {
+      final ProductModel? startAfterModel =
+          startAfter != null ? ProductModel.fromEntity(startAfter) : null;
       final List<ProductModel> products = await baseProductsRemoteDataSource
-          .getAllProductsInCategory(CategoryModel.fromEntity(category));
-      baseProductsLocalDataSource.saveProductsInCategory(
-          products, CategoryModel.fromEntity(category));
+          .getProductsInSubCategory(
+        SubCategoryModel.fromEntity(subCategory),
+        startAfterModel,
+      );
+      baseProductsLocalDataSource.saveProductsInSubCategory(
+          products, SubCategoryModel.fromEntity(subCategory));
       return Right(products);
     } on ConnectionException catch (e) {
       final List<ProductModel> products =
-          baseProductsLocalDataSource.getAllProductsInCategory(
-        CategoryModel.fromEntity(category),
+          baseProductsLocalDataSource.getProductsInSubCategory(
+        SubCategoryModel.fromEntity(subCategory),
       );
       if (products.isNotEmpty) {
         return Right(products);
@@ -107,8 +118,8 @@ class ProductsRepository implements BaseProductsRepository {
       );
     } catch (e) {
       final List<ProductModel> products =
-          baseProductsLocalDataSource.getAllProductsInCategory(
-        CategoryModel.fromEntity(category),
+          baseProductsLocalDataSource.getProductsInSubCategory(
+        SubCategoryModel.fromEntity(subCategory),
       );
       if (products.isNotEmpty) {
         return Right(products);
@@ -120,19 +131,26 @@ class ProductsRepository implements BaseProductsRepository {
   }
 
   @override
-  Future<Either<Failure, List<SubCategoryModel>>> getAllSubCategoriesInCategory(
+  Future<Either<Failure, List<SubCategoryModel>>> getSubCategoriesInCategory(
     Category category,
+    [
+    SubCategory? startAfter,
+  ]
   ) async {
     try {
+      final SubCategoryModel? startAfterModel =
+          startAfter != null ? SubCategoryModel.fromEntity(startAfter) : null;
       final List<SubCategoryModel> subCategories =
-          await baseProductsRemoteDataSource.getAllSubCategoriesInCategory(
-              CategoryModel.fromEntity(category));
+          await baseProductsRemoteDataSource.getSubCategoriesInCategory(
+        CategoryModel.fromEntity(category),
+        startAfterModel,
+      );
       baseProductsLocalDataSource.saveSubCategoriesInCategory(
           subCategories, CategoryModel.fromEntity(category));
       return Right(subCategories);
     } on ConnectionException catch (e) {
       final List<SubCategoryModel> subCategories = baseProductsLocalDataSource
-          .getAllSubCategoriesInCategory(CategoryModel.fromEntity(category));
+          .getSubCategoriesInCategory(CategoryModel.fromEntity(category));
       if (subCategories.isNotEmpty) {
         return Right(subCategories);
       }
@@ -141,7 +159,7 @@ class ProductsRepository implements BaseProductsRepository {
       );
     } catch (e) {
       final List<SubCategoryModel> subCategories = baseProductsLocalDataSource
-          .getAllSubCategoriesInCategory(CategoryModel.fromEntity(category));
+          .getSubCategoriesInCategory(CategoryModel.fromEntity(category));
       if (subCategories.isNotEmpty) {
         return Right(subCategories);
       }

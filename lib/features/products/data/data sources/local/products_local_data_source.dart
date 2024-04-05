@@ -5,21 +5,21 @@ import 'package:fruit_market/features/products/data/models/sub_category_model.da
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class BaseProductsLocalDataSource {
-  List<ProductModel> getAllProductsInCategory(
+  List<ProductModel> getProductsInSubCategory(
+    SubCategoryModel subCategory,
+  );
+
+  List<SubCategoryModel> getSubCategoriesInCategory(
     CategoryModel category,
   );
 
-  List<SubCategoryModel> getAllSubCategoriesInCategory(
-    CategoryModel category,
-  );
-
-  List<CategoryModel> getAllCategories();
+  List<CategoryModel> getCategories();
 
   void saveCategories(List<CategoryModel> categories);
   void saveSubCategoriesInCategory(
       List<SubCategoryModel> subCategories, CategoryModel category);
-  void saveProductsInCategory(
-      List<ProductModel> products, CategoryModel category);
+  void saveProductsInSubCategory(
+      List<ProductModel> products, SubCategoryModel subCategory);
 
   void addToCart(ProductModel product);
   void removeFromCart(ProductModel product);
@@ -50,7 +50,7 @@ class ProductsLocalDataSource implements BaseProductsLocalDataSource {
   void removeFromFavourites(ProductModel product) {}
 
   @override
-  List<CategoryModel> getAllCategories() {
+  List<CategoryModel> getCategories() {
     final List<CategoryModel> categories = categoryBox.values.toList();
     if (categories.isEmpty) {
       throw const CacheException('No categories found!');
@@ -59,10 +59,12 @@ class ProductsLocalDataSource implements BaseProductsLocalDataSource {
   }
 
   @override
-  List<ProductModel> getAllProductsInCategory(
-    CategoryModel category,
+  List<ProductModel> getProductsInSubCategory(
+    SubCategoryModel subCategory,
   ) {
-    final List<ProductModel> products = productBox.values.toList();
+    final List<ProductModel> products = productBox.values
+        .where((product) => product.subCategoryId == subCategory.id)
+        .toList();
     if (products.isEmpty) {
       throw const CacheException('No products found!');
     }
@@ -70,10 +72,12 @@ class ProductsLocalDataSource implements BaseProductsLocalDataSource {
   }
 
   @override
-  List<SubCategoryModel> getAllSubCategoriesInCategory(
+  List<SubCategoryModel> getSubCategoriesInCategory(
     CategoryModel category,
   ) {
-    final List<SubCategoryModel> subCategories = subCategoryBox.values.toList();
+    final List<SubCategoryModel> subCategories = subCategoryBox.values
+        .where((subCategory) => subCategory.categoryId == category.id)
+        .toList();
     if (subCategories.isEmpty) {
       throw const CacheException('No sub categories found!');
     }
@@ -82,18 +86,33 @@ class ProductsLocalDataSource implements BaseProductsLocalDataSource {
 
   @override
   void saveCategories(List<CategoryModel> categories) {
+    categoryBox.clear();
     categoryBox.addAll(categories);
   }
 
   @override
-  void saveProductsInCategory(
-      List<ProductModel> products, CategoryModel category) {
+  void saveProductsInSubCategory(
+      List<ProductModel> products, SubCategoryModel subCategory) {
+    List<int> keys = [];
+    productBox.toMap().forEach((key, product) {
+      if (product.subCategoryId == subCategory.id) {
+        keys.add(key);
+      }
+    });
+    productBox.deleteAll(keys);
     productBox.addAll(products);
   }
 
   @override
   void saveSubCategoriesInCategory(
       List<SubCategoryModel> subCategories, CategoryModel category) {
+    List<int> keys = [];
+    subCategoryBox.toMap().forEach((key, subCategory) {
+      if (subCategory.categoryId == category.id) {
+        keys.add(key);
+      }
+    });
+    subCategoryBox.deleteAll(keys);
     subCategoryBox.addAll(subCategories);
   }
 }

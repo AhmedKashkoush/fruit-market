@@ -35,3 +35,18 @@ void pop<T extends Object?>(BuildContext context, [T? result]) {
     result,
   );
 }
+
+void goNamed(
+  String name,
+  BuildContext context, {
+  Map<String, String> pathParameters = const <String, String>{},
+  Map<String, dynamic> queryParameters = const <String, dynamic>{},
+  Object? extra,
+}) {
+  context.goNamed(
+    name,
+    pathParameters: pathParameters,
+    queryParameters: queryParameters,
+    extra: extra,
+  );
+}

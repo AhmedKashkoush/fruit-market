@@ -25,6 +25,9 @@ class ProductModel extends Product {
 
   @HiveField(6)
   final List<String> _nutritions;
+
+  @HiveField(7)
+  final String _subCategoryId;
   const ProductModel({
     required String id,
     required String name,
@@ -33,6 +36,7 @@ class ProductModel extends Product {
     required String imageUrl,
     required List<String> nutritions,
     required double rate,
+    required String subCategoryId,
   })  : _id = id,
         _name = name,
         _description = description,
@@ -40,6 +44,7 @@ class ProductModel extends Product {
         _imageUrl = imageUrl,
         _nutritions = nutritions,
         _rate = rate,
+        _subCategoryId = subCategoryId,
         super(
           id: id,
           name: name,
@@ -48,6 +53,7 @@ class ProductModel extends Product {
           imageUrl: imageUrl,
           nutritions: nutritions,
           rate: rate,
+          subCategoryId: subCategoryId,
         );
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
@@ -58,6 +64,7 @@ class ProductModel extends Product {
       imageUrl: json['image'],
       nutritions: List.from(json['nutritions']),
       rate: json['rate'],
+      subCategoryId: json['subCategoryId'],
     );
   }
 
@@ -70,6 +77,7 @@ class ProductModel extends Product {
       'image': _imageUrl,
       'nutritions': _nutritions,
       'rate': _rate,
+      'subCategory': _subCategoryId,
     };
   }
 
@@ -82,6 +90,7 @@ class ProductModel extends Product {
       imageUrl: product.imageUrl,
       nutritions: product.nutritions,
       rate: product.rate,
+      subCategoryId: product.subCategoryId,
     );
   }
 }

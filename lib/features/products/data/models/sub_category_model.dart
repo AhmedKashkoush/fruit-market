@@ -1,4 +1,4 @@
-import 'package:fruit_market/features/products/data/models/product_model.dart';
+
 import 'package:fruit_market/features/products/domain/entities/sub_category.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -19,24 +19,24 @@ class SubCategoryModel extends SubCategory {
   final double _sale;
 
   @HiveField(4)
-  final List<ProductModel> _products;
+  final String _categoryId;
 
   const SubCategoryModel({
     required String id,
     required String name,
     required String description,
-    required List<ProductModel> products,
+    required String categoryId,
     double sale = 0.0,
   })  : _id = id,
         _name = name,
         _description = description,
-        _products = products,
         _sale = sale,
+        _categoryId = categoryId,
         super(
           id: id,
           name: name,
           description: description,
-          products: products,
+          categoryId: categoryId,
         );
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
@@ -44,12 +44,8 @@ class SubCategoryModel extends SubCategory {
       id: json['id'],
       name: json['name'],
       description: json['description'],
-      products: List<ProductModel>.from(
-        json['products'].map(
-          (e) => ProductModel.fromJson(e),
-        ),
-      ),
       sale: json['sale'],
+      categoryId: json['categoryId'],
     );
   }
 
@@ -58,8 +54,8 @@ class SubCategoryModel extends SubCategory {
       'id': _id,
       'name': _name,
       'description': _description,
-      'products': _products.map((e) => e.toJson()).toList(),
       'sale': _sale,
+      'categoryId': _categoryId,
     };
   }
 
@@ -68,8 +64,8 @@ class SubCategoryModel extends SubCategory {
       id: entity.id,
       name: entity.name,
       description: entity.description,
-      products: entity.products.map((e) => ProductModel.fromEntity(e)).toList(),
       sale: entity.sale,
+      categoryId: entity.categoryId,
     );
   }
 }

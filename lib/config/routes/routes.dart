@@ -9,4 +9,8 @@ class AppRoutes {
   static const String emailVerification = '/email-verification';
   static const String phoneVerification = '/phone-verification';
   static const String chooseLocation = '/choose-location';
+  static const String home = '/';
+  static const String shoppingCart = '/shopping-cart';
+  static const String favourites = '/favourites';
+  static const String myAccount = '/my-account';
 }

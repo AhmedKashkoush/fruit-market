@@ -47,6 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
               'You logged in successfully',
               successType: SuccessType.auth,
             );
+            goNamed(AppRoutes.home, context);
           }
 
           if (state is EmailVerificationError) {

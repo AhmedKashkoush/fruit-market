@@ -32,12 +32,13 @@ import 'package:fruit_market/features/products/data/repositories/products_reposi
 import 'package:fruit_market/features/products/domain/repositories/base_products_repository.dart';
 import 'package:fruit_market/features/products/domain/usecases/add_to_cart_usecase.dart';
 import 'package:fruit_market/features/products/domain/usecases/add_to_favourites_usecase.dart';
-import 'package:fruit_market/features/products/domain/usecases/get_all_categories_usecase.dart';
-import 'package:fruit_market/features/products/domain/usecases/get_all_products_in_category_usecase.dart';
-import 'package:fruit_market/features/products/domain/usecases/get_all_sub_categories_in_category_usecase.dart';
+import 'package:fruit_market/features/products/domain/usecases/get_categories_usecase.dart';
+import 'package:fruit_market/features/products/domain/usecases/get_products_in_sub_category_usecase.dart';
+import 'package:fruit_market/features/products/domain/usecases/get_sub_categories_in_category_usecase.dart';
 import 'package:fruit_market/features/products/domain/usecases/remove_from_cart_usecase.dart';
 import 'package:fruit_market/features/products/domain/usecases/remove_from_favourites_usecase.dart';
 import 'package:fruit_market/features/products/domain/usecases/search_products_by_query_usecase.dart';
+import 'package:fruit_market/features/products/presentation/screens/home/bloc/home_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -68,6 +69,7 @@ Future<void> initLocator() async {
 
 ///Init Blocs
 void _initBlocs() {
+  ///Auth
   sl.registerFactory<LoginBloc>(
     () => LoginBloc(
       sl<LoginUseCase>(),
@@ -101,6 +103,13 @@ void _initBlocs() {
       sl<VerifyPhoneUseCase>(),
     ),
   );
+
+  ///Products
+  sl.registerFactory<HomeBloc>(() => HomeBloc(
+        sl<GetCategoriesUseCase>(),
+        sl<GetProductsInSubCategoryUseCase>(),
+        sl<GetSubCategoriesInCategoryUseCase>(),
+      ));
 }
 
 ///Init UseCases
@@ -159,18 +168,18 @@ void _initUseCases() {
   );
 
   //Products
-  sl.registerLazySingleton<GetAllCategoriesUseCase>(
-    () => GetAllCategoriesUseCase(
+  sl.registerLazySingleton<GetCategoriesUseCase>(
+    () => GetCategoriesUseCase(
       sl<BaseProductsRepository>(),
     ),
   );
-  sl.registerLazySingleton<GetAllSubCategoriesInCategoryUseCase>(
-    () => GetAllSubCategoriesInCategoryUseCase(
+  sl.registerLazySingleton<GetSubCategoriesInCategoryUseCase>(
+    () => GetSubCategoriesInCategoryUseCase(
       sl<BaseProductsRepository>(),
     ),
   );
-  sl.registerLazySingleton<GetAllProductsInCategoryUseCase>(
-    () => GetAllProductsInCategoryUseCase(
+  sl.registerLazySingleton<GetProductsInSubCategoryUseCase>(
+    () => GetProductsInSubCategoryUseCase(
       sl<BaseProductsRepository>(),
     ),
   );

@@ -20,7 +20,8 @@ class SubCategoryModelAdapter extends TypeAdapter<SubCategoryModel> {
       id: fields[0] as String,
       name: fields[1] as String,
       description: fields[2] as String,
-      products: fields[3] as List<ProductModel>,
+      sale: fields[3] as double,
+      categoryId: fields[4] as String,
     );
   }
 
@@ -37,7 +38,7 @@ class SubCategoryModelAdapter extends TypeAdapter<SubCategoryModel> {
       ..writeByte(3)
       ..write(obj._sale)
       ..writeByte(4)
-      ..write(obj._products);
+      ..write(obj._categoryId);
   }
 
   @override
