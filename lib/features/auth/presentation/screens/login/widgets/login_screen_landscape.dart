@@ -24,7 +24,7 @@ class LoginScreenLandscape extends StatelessWidget {
       loginWithGoogle,
       loginWithFacebook,
       goToSignUp,
-      goToChooseVerifiyMethod;
+      goToChooseVerifyMethod;
   final void Function() togglePasswordInvisibility;
   const LoginScreenLandscape({
     super.key,
@@ -39,7 +39,7 @@ class LoginScreenLandscape extends StatelessWidget {
     required this.loginWithFacebook,
     required this.togglePasswordInvisibility,
     required this.goToSignUp,
-    required this.goToChooseVerifiyMethod,
+    required this.goToChooseVerifyMethod,
   });
 
   @override
@@ -98,7 +98,7 @@ class LoginScreenLandscape extends StatelessWidget {
                   ForgotPasswordButton(
                     onTap: isLoading || isGoogleLoading || isFacebookLoading
                         ? null
-                        : () => goToChooseVerifiyMethod(context),
+                        : () => goToChooseVerifyMethod(context),
                   ),
                   const Gap(15),
                   CustomElevatedButton(

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/core/utils/locator.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/core/utils/snack_messages.dart';
 import 'package:fruit_market/core/widgets/headers/transparent_app_bar.dart';
 import 'package:fruit_market/core/widgets/inputs/custom_otp_field.dart';

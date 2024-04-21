@@ -20,17 +20,3 @@ class RefreshEvent extends HomeEvent {
   final Category category;
   const RefreshEvent(this.category);
 }
-
-class LoadMoreCategoriesEvent extends HomeEvent {
-  final Category category, startAfter;
-  const LoadMoreCategoriesEvent(
-    this.category,
-    this.startAfter,
-  );
-}
-
-class LoadMoreSubCategoriesEvent extends HomeEvent {
-  final Category category;
-  final SubCategory startAfter;
-  const LoadMoreSubCategoriesEvent(this.category, this.startAfter);
-}

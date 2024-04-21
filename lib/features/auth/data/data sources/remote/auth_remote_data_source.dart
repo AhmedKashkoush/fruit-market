@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:fruit_market/core/constants/firebase_paths.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/features/auth/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';

@@ -4,8 +4,10 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:fruit_market/config/themes/cubit/theme_cubit.dart';
 import 'package:fruit_market/core/constants/api_keys.dart';
 import 'package:fruit_market/core/constants/hive_boxes.dart';
+import 'package:fruit_market/core/helpers/shared_preferences_helper.dart';
 import 'package:fruit_market/features/auth/data/data%20sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_market/features/auth/data/repositories/auth_repository.dart';
 import 'package:fruit_market/features/auth/domain/repositories/base_auth_repository.dart';
@@ -39,6 +41,7 @@ import 'package:fruit_market/features/products/domain/usecases/remove_from_cart_
 import 'package:fruit_market/features/products/domain/usecases/remove_from_favourites_usecase.dart';
 import 'package:fruit_market/features/products/domain/usecases/search_products_by_query_usecase.dart';
 import 'package:fruit_market/features/products/presentation/screens/home/bloc/home_bloc.dart';
+import 'package:fruit_market/features/products/presentation/screens/view%20all%20products/bloc/view_all_products_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -47,29 +50,42 @@ import 'package:shared_preferences/shared_preferences.dart';
 final GetIt sl = GetIt.instance;
 
 Future<void> initLocator() async {
-  
-  ///Blocs
+
+  //*Cubits
+  _initCubits();
+
+  //*Blocs
   _initBlocs();
 
-  ///UseCases
+  //*UseCases
   _initUseCases();
 
-  ///Repositories
+  //*Repositories
   _initRepositories();
 
-  ///Remote Data Sources
+  //*Remote Data Sources
   _initRemoteDataSources();
 
-  ///Local Data Sources
+  //*Local Data Sources
   _initLocalDataSources();
 
-  //External
+  //*External
   await _initExternal();
 }
 
-///Init Blocs
+//*Init Cubits
+void _initCubits() {
+  //*Theme
+  sl.registerFactory<ThemeCubit>(
+    () => ThemeCubit(
+      sl<SharedPreferencesHelper>(),
+    ),
+  );
+}
+
+//*Init Blocs
 void _initBlocs() {
-  ///Auth
+  //*Auth
   sl.registerFactory<LoginBloc>(
     () => LoginBloc(
       sl<LoginUseCase>(),
@@ -104,17 +120,26 @@ void _initBlocs() {
     ),
   );
 
-  ///Products
+  //*Products
   sl.registerFactory<HomeBloc>(() => HomeBloc(
         sl<GetCategoriesUseCase>(),
-        sl<GetProductsInSubCategoryUseCase>(),
-        sl<GetSubCategoriesInCategoryUseCase>(),
-      ));
+      sl<GetSubCategoriesInCategoryUseCase>(),
+      sl<GetProductsInSubCategoryUseCase>(),
+    ),
+  );
+
+  sl.registerFactory<ViewAllProductsBloc>(
+    () => ViewAllProductsBloc(
+      sl<GetCategoriesUseCase>(),
+      sl<GetSubCategoriesInCategoryUseCase>(),
+      sl<GetProductsInSubCategoryUseCase>(),
+    ),
+  );
 }
 
-///Init UseCases
+//*Init UseCases
 void _initUseCases() {
-  ///Auth
+  //*Auth
   sl.registerLazySingleton<LoginUseCase>(
     () => LoginUseCase(
       sl<BaseAuthRepository>(),
@@ -167,7 +192,7 @@ void _initUseCases() {
     ),
   );
 
-  //Products
+  //*Products
   sl.registerLazySingleton<GetCategoriesUseCase>(
     () => GetCategoriesUseCase(
       sl<BaseProductsRepository>(),
@@ -210,13 +235,16 @@ void _initUseCases() {
   );
 }
 
-///Init Repositories
+//*Init Repositories
 void _initRepositories() {
+  //*Auth
   sl.registerLazySingleton<BaseAuthRepository>(
     () => AuthRepository(
       sl<BaseAuthRemoteDataSource>(),
     ),
   );
+
+  //*Products
   sl.registerLazySingleton<BaseProductsRepository>(
     () => ProductsRepository(
       sl<BaseProductsRemoteDataSource>(),
@@ -226,8 +254,9 @@ void _initRepositories() {
 }
 
 
-///Init Remote Data Sources
+//*Init Remote Data Sources
 void _initRemoteDataSources() {
+  //*Auth
   sl.registerLazySingleton<BaseAuthRemoteDataSource>(
     () => AuthRemoteDataSource(
       sl<FirebaseAuth>(),
@@ -238,11 +267,21 @@ void _initRemoteDataSources() {
       sl<Connectivity>(),
     ),
   );
+
+  //*Products
+  sl.registerLazySingleton<BaseProductsRemoteDataSource>(
+    () => ProductsRemoteDataSource(
+      sl<FirebaseAuth>(),
+      sl<FirebaseFirestore>(),
+      sl<Connectivity>(),
+    ),
+  );
 }
 
 
-///Init Local Data Sources
+//*Init Local Data Sources
 void _initLocalDataSources() {
+  //*Products
   sl.registerLazySingleton<BaseProductsLocalDataSource>(
     () => ProductsLocalDataSource(
       sl<Box<CategoryModel>>(),
@@ -252,24 +291,24 @@ void _initLocalDataSources() {
   );
 }
 
-///Init External
+//*Init External
 Future<void> _initExternal() async {
-  ///Firebase Auth
+  //*Firebase Auth
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
-  ///Firebase Firestore
+  //*Firebase Firestore
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
 
-  ///Firebase Storage
+  //*Firebase Storage
   sl.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
   
-  ///Google Auth
+  //*Google Auth
   final List<String> scopes = ['email'];
   sl.registerLazySingleton<GoogleSignIn>(
     () => GoogleSignIn(clientId: googleWebClientId, scopes: scopes),
   );
 
-  ///Facebook Auth
+  //*Facebook Auth
   sl.registerLazySingleton<FacebookAuth>(() => FacebookAuth.instance);
   if (kIsWeb) {
     sl<FacebookAuth>().webAndDesktopInitialize(
@@ -280,18 +319,22 @@ Future<void> _initExternal() async {
     );
   }
 
-  ///Connectivity
+  //*Connectivity
   sl.registerLazySingleton<Connectivity>(
     () => Connectivity(),
   );
 
-  ///Shared Preferences
+  //*Shared Preferences
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  sl.registerLazySingleton<SharedPreferences>(
-    () => prefs,
+  // sl.registerLazySingleton<SharedPreferences>(
+  //   () => prefs,
+  // );
+
+  sl.registerLazySingleton<SharedPreferencesHelper>(
+    () => SharedPreferencesHelper(prefs),
   );
 
-  ///Hive
+  //*Hive
   final Box<CategoryModel> categoryBox =
       await Hive.openBox<CategoryModel>(HiveBoxes.categories);
   sl.registerLazySingleton<Box<CategoryModel>>(

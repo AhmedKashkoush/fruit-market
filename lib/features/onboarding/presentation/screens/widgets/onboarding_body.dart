@@ -19,7 +19,7 @@ class OnBoardingBody extends StatefulWidget {
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   final PageController _controller = PageController();
   final ValueNotifier<bool> _isLast = ValueNotifier<bool>(false);
-  final SharedPreferecesHelper _helper = SharedPreferecesHelper();
+  final SharedPreferencesHelper _helper = SharedPreferencesHelper();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);

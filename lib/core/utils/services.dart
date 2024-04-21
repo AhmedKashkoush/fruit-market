@@ -13,6 +13,7 @@ Future<void> initializeServices() async {
 
   await initNotifications();
   await initHive();
+  //TODO: Init Stripe
   // Bloc.observer = MyObserver();
   await initLocator();
 

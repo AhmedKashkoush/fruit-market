@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:fruit_market/core/errors/exceptions.dart';
 import 'package:fruit_market/core/errors/failures.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/features/auth/data/data%20sources/remote/auth_remote_data_source.dart';
 import 'package:fruit_market/features/auth/data/models/user_model.dart';
 import 'package:fruit_market/features/auth/domain/repositories/base_auth_repository.dart';

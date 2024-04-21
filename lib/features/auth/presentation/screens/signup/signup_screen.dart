@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/core/utils/snack_messages.dart';
 import 'package:fruit_market/core/widgets/buttons/auth_toggle_widget.dart';
 import 'package:fruit_market/core/widgets/buttons/custom_elevated_button.dart';

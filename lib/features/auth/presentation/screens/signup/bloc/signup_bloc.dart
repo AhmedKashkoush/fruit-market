@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/core/errors/failures.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/features/auth/domain/entities/user.dart';
 import 'package:fruit_market/features/auth/domain/usecases/send_email_verification_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/sign_up_usecase.dart';

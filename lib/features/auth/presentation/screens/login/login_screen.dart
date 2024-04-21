@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fruit_market/config/routes/path_parameters.dart';
+import 'package:fruit_market/config/routes/extras.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/core/utils/snack_messages.dart';
 import 'package:fruit_market/core/widgets/layout/orientation_widget.dart';
 import 'package:fruit_market/features/auth/presentation/screens/login/bloc/login_bloc.dart';
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 loginWithFacebook: _loginWithFacebook,
                 togglePasswordInvisibility: _togglePasswordInvisibility,
                 goToSignUp: _goToSignUp,
-                goToChooseVerifiyMethod: _goToChooseVerifiyMethod,
+                goToChooseVerifyMethod: _goToChooseVerifyMethod,
               ),
               landscape: LoginScreenLandscape(
                 isPasswordShown: _isPasswordShown,
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 loginWithFacebook: _loginWithFacebook,
                 togglePasswordInvisibility: _togglePasswordInvisibility,
                 goToSignUp: _goToSignUp,
-                goToChooseVerifiyMethod: _goToChooseVerifiyMethod,
+                goToChooseVerifyMethod: _goToChooseVerifyMethod,
               ),
             ),
           );
@@ -134,15 +134,15 @@ class _LoginScreenState extends State<LoginScreen> {
     _isPasswordShown.value = !_isPasswordShown.value;
   }
 
-  void _goToChooseVerifiyMethod(BuildContext context) {
-    final Map<String, String> pathParameters = {
-      PathParameters.emailRoute: AppRoutes.emailInput,
-      PathParameters.phoneRoute: AppRoutes.phoneInput,
+  void _goToChooseVerifyMethod(BuildContext context) {
+    final Map<String, String> extras = {
+      Extras.emailRoute: AppRoutes.emailInput,
+      Extras.phoneRoute: AppRoutes.phoneInput,
     };
     pushNamed(
       AppRoutes.chooseVerificationMethod,
       context,
-      pathParameters: pathParameters,
+      extra: extras,
     );
   }
 

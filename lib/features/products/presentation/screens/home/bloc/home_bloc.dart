@@ -16,12 +16,12 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetCategoriesUseCase getCategoriesUseCase;
-  final GetProductsInSubCategoryUseCase getProductsInSubCategoryUseCase;
   final GetSubCategoriesInCategoryUseCase getSubCategoriesInCategoryUseCase;
+  final GetProductsInSubCategoryUseCase getProductsInSubCategoryUseCase;
   HomeBloc(
     this.getCategoriesUseCase,
-    this.getProductsInSubCategoryUseCase,
     this.getSubCategoriesInCategoryUseCase,
+    this.getProductsInSubCategoryUseCase,
   ) : super(
           const HomeState(
             categories: [],

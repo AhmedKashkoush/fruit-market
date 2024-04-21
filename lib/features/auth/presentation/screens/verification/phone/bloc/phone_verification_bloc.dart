@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fruit_market/core/errors/failures.dart';
 import 'package:fruit_market/core/utils/enums.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 import 'package:fruit_market/features/auth/domain/usecases/send_phone_verification_usecase.dart';
 import 'package:fruit_market/features/auth/domain/usecases/verify_phone_usecase.dart';
 

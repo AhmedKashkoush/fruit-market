@@ -1,7 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fruit_market/config/routes/path_parameters.dart';
+import 'package:fruit_market/config/routes/extras.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/extensions/string_validations.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
@@ -90,12 +90,13 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
   }
 
   void _goToCodeScreen(String verificationId) {
-    final Map<String, String> pathParameters = {
-      PathParameters.phoneNumber: _text.value,
-      PathParameters.verificationId: verificationId,
+    final Map<String, String> extras = {
+      Extras.phoneNumber: _text.value,
+      Extras.verificationId: verificationId,
     };
     pushReplacementNamed(AppRoutes.phoneVerification, context,
-        pathParameters: pathParameters);
+      extra: extras,
+    );
   }
 
   void _onCodeChange(CountryCode value) {

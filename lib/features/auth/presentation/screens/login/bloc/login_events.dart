@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:fruit_market/core/utils/partameters.dart';
+import 'package:fruit_market/core/utils/parameters.dart';
 
 abstract class LoginEvent extends Equatable {}
 

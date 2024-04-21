@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fruit_market/config/routes/extras.dart';
 import 'package:fruit_market/config/routes/path_parameters.dart';
 import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/utils/locator.dart';
@@ -15,6 +16,7 @@ import 'package:fruit_market/features/auth/presentation/screens/verification/ema
 import 'package:fruit_market/features/auth/presentation/screens/verification/phone/phone_verification_screen.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:fruit_market/features/products/presentation/screens/home/bloc/home_bloc.dart';
+import 'package:fruit_market/features/products/presentation/screens/view%20all%20products/bloc/view_all_products_bloc.dart';
 import 'package:fruit_market/features/splash/presentation/screens/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,10 +49,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: AppRoutes.chooseVerificationMethod,
       path:
-          '${AppRoutes.chooseVerificationMethod}/:${PathParameters.emailRoute}/:${PathParameters.phoneRoute}',
+          AppRoutes.chooseVerificationMethod,
       builder: (context, state) => ChooseVerificationMethodScreen(
-        emailRoute: state.pathParameters[PathParameters.emailRoute]!,
-        phoneRoute: state.pathParameters[PathParameters.phoneRoute]!,
+        emailRoute: (state.extra as Map<String, String>)[Extras.emailRoute]!,
+        phoneRoute: (state.extra as Map<String, String>)[Extras.phoneRoute]!,
       ),
     ),
     GoRoute(
@@ -65,18 +67,19 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       name: AppRoutes.emailVerification,
-      path: '${AppRoutes.emailVerification}/:${PathParameters.email}',
+      path: AppRoutes.emailVerification,
       builder: (context, state) => PasswordResetEmailScreen(
-        email: state.pathParameters[PathParameters.email]!,
+        email: state.pathParameters[Extras.email]!,
       ),
     ),
     GoRoute(
       name: AppRoutes.phoneVerification,
       path:
-          '${AppRoutes.phoneVerification}/:${PathParameters.verificationId}/:${PathParameters.phoneNumber}',
+          AppRoutes.phoneVerification,
       builder: (context, state) => PhoneVerificationScreen(
-        verificationId: state.pathParameters[PathParameters.verificationId]!,
-        phoneNumber: state.pathParameters[PathParameters.phoneNumber]!,
+        verificationId:
+            (state.extra as Map<String, String>)[Extras.verificationId]!,
+        phoneNumber: (state.extra as Map<String, String>)[Extras.phoneNumber]!,
       ),
     ),
     GoRoute(
@@ -90,8 +93,8 @@ final GoRouter router = GoRouter(
       parentNavigatorKey: _rootKey,
       builder: (context, state, navigationShell) => MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) => sl<HomeBloc>(),
+          BlocProvider.value(
+            value: sl<HomeBloc>(),
           ),
         ],
         child: HomeNavigationScreen(
@@ -107,6 +110,33 @@ final GoRouter router = GoRouter(
               name: AppRoutes.home,
               path: AppRoutes.home,
               builder: (context, state) => const SizedBox(),
+                routes: [
+                  GoRoute(
+                    name: AppRoutes.productDetails,
+                    path: '${AppRoutes.productDetails}/:${PathParameters.id}',
+                    builder: (context, state) => const SizedBox(),
+                  ),
+                  GoRoute(
+                    name: AppRoutes.viewAllProducts,
+                    path: AppRoutes.viewAllProducts,
+                    builder: (context, state) => BlocProvider(
+                      create: (context) => sl<ViewAllProductsBloc>()
+                        ..add(
+                          ViewProductsInSubCategoryEvent(
+                            category: (state.extra
+                                as Map<String, dynamic>)[Extras.category],
+                            subCategory: (state.extra
+                                as Map<String, dynamic>)[Extras.subCategory],
+                            initialCategories: (state.extra as Map<String,
+                                dynamic>)[Extras.initialCategories],
+                            initialSubCategories: (state.extra as Map<String,
+                                dynamic>)[Extras.initialSubCategories],
+                          ),
+                        ),
+                      child: const SizedBox(),
+                    ),
+                  )
+                ]
             ),
             GoRoute(
               name: AppRoutes.shoppingCart,

@@ -23,7 +23,7 @@ class LoginScreenPortrait extends StatelessWidget {
       loginWithGoogle,
       loginWithFacebook,
       goToSignUp,
-      goToChooseVerifiyMethod;
+      goToChooseVerifyMethod;
   final void Function() togglePasswordInvisibility;
   const LoginScreenPortrait({
     super.key,
@@ -38,7 +38,7 @@ class LoginScreenPortrait extends StatelessWidget {
     required this.loginWithFacebook,
     required this.togglePasswordInvisibility,
     required this.goToSignUp,
-    required this.goToChooseVerifiyMethod,
+    required this.goToChooseVerifyMethod,
   });
 
   @override
@@ -84,7 +84,7 @@ class LoginScreenPortrait extends StatelessWidget {
           ForgotPasswordButton(
             onTap: isLoading || isGoogleLoading || isFacebookLoading
                 ? null
-                : () => goToChooseVerifiyMethod(context),
+                : () => goToChooseVerifyMethod(context),
           ),
           const Gap(15),
           CustomElevatedButton(

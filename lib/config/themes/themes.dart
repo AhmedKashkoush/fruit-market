@@ -16,5 +16,3 @@ final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   fontFamily: 'Poppins',
 );
-
-ThemeMode themeMode = ThemeMode.system;

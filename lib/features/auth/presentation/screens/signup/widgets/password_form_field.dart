@@ -38,8 +38,10 @@ class PasswordFormField extends StatelessWidget {
 
   String? _passwordValidator(String? password) {
     if (password == null || password.isEmpty) return 'Required field';
-    if (password.length < 8) return 'Password must be at least 3 characters';
-    if (!password.isStrongPassword) return 'Password is not strong';
+    if (password.length < 8) return 'Password must be at least 8 characters';
+    if (!password.isStrongPassword) {
+      return 'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 symbol';
+    }
     return null;
   }
 }

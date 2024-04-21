@@ -17,7 +17,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  final SharedPreferecesHelper _helper = SharedPreferecesHelper();
+  final SharedPreferencesHelper _helper = sl<SharedPreferencesHelper>();
   late final AnimationController _controller = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 1),

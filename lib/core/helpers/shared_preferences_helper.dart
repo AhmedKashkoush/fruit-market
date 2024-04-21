@@ -1,8 +1,10 @@
-import 'package:fruit_market/core/utils/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SharedPreferecesHelper {
-  final SharedPreferences prefs = sl<SharedPreferences>();
+class SharedPreferencesHelper {
+  final SharedPreferences prefs;
+
+  SharedPreferencesHelper(this.prefs);
+
 
   void write<T>(String key, T value) async {
     switch (value.runtimeType) {
