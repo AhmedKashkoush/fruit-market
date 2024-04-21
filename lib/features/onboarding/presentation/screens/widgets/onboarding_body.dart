@@ -3,6 +3,7 @@ import 'package:fruit_market/config/routes/routes.dart';
 import 'package:fruit_market/core/constants/preferences_keys.dart';
 import 'package:fruit_market/core/helpers/shared_preferences_helper.dart';
 import 'package:fruit_market/core/utils/app_navigator.dart';
+import 'package:fruit_market/core/utils/locator.dart';
 import 'package:fruit_market/core/widgets/layout/orientation_widget.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_landscape.dart';
 import 'package:fruit_market/features/onboarding/presentation/screens/widgets/onboarding_body_portrait.dart';
@@ -19,7 +20,7 @@ class OnBoardingBody extends StatefulWidget {
 class _OnBoardingBodyState extends State<OnBoardingBody> {
   final PageController _controller = PageController();
   final ValueNotifier<bool> _isLast = ValueNotifier<bool>(false);
-  final SharedPreferencesHelper _helper = SharedPreferencesHelper();
+  final SharedPreferencesHelper _helper = sl<SharedPreferencesHelper>();
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_postFrameCallback);
